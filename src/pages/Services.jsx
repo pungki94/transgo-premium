@@ -9,13 +9,13 @@ import CoverageAreaSection from '../components/CoverageAreaSection';
 export default function Services() {
     
     return (
-        <div className="bg-[#0B0F19] min-h-screen font-sans pt-[75px]">
+        <div className="bg-[#0B0F19] min-h-screen font-sans pt-[60px] md:pt-[75px]">
             <ServicesSection isHero={true} />
 
-            <section className="py-24 relative overflow-hidden bg-[#080B13]">
+            <section className="py-16 md:py-24 relative overflow-hidden bg-[#080B13]">
                 <div className="max-w-[85rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-16">
                     <div className="w-full lg:w-1/2">
-                        <h2 className="text-4xl lg:text-5xl font-black italic uppercase text-white tracking-tighter mb-8">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black italic uppercase text-white tracking-tighter mb-6 md:mb-8">
                             Comprehensive <br/>
                             <span className="text-amber-500">Transport Ecosystem</span>
                         </h2>
@@ -30,7 +30,7 @@ export default function Services() {
                         </ul>
                     </div>
                     <div className="w-full lg:w-1/2 relative">
-                        <div className="aspect-[4/3] rounded-[40px] overflow-hidden shadow-2xl relative">
+                        <div className="aspect-[4/3] rounded-[24px] md:rounded-[40px] overflow-hidden shadow-2xl relative">
                             <img src={resolveImage("bus-fleet.jpg")} className="w-full h-full object-cover" alt="Service Detail" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] to-transparent"></div>
                         </div>
@@ -44,7 +44,7 @@ export default function Services() {
             <section className="py-20 relative z-10 border-t border-white/10">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#080B13] to-[#0B0F19] z-0" />
                 <div className="max-w-[70rem] mx-auto px-6 relative z-10 text-center">
-                    <h2 className="text-5xl lg:text-[4rem] font-black italic uppercase text-white tracking-tighter mb-6 leading-none">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[4rem] font-black italic uppercase text-white tracking-tighter mb-4 md:mb-6 leading-none">
                         Ready To Experience <br/>
                         <span className="text-amber-500">Elite Transport?</span>
                     </h2>

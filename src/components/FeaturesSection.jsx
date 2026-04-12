@@ -6,12 +6,12 @@ import { features, featuresContent } from '../data/features';
 
 export default function FeaturesSection({ variant = "home" }) {
     return (
-        <section className={`py-24 relative overflow-hidden ${variant === 'home' ? 'bg-[#080B13] border-y border-white/5' : 'border-y border-white/5'}`}>
+        <section className={`py-16 md:py-24 relative overflow-hidden ${variant === 'home' ? 'bg-[#080B13] border-y border-white/5' : 'border-y border-white/5'}`}>
             <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[40rem] h-[40rem] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="max-w-[85rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-16 relative z-10">
+            <div className="max-w-[85rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-10 md:gap-16 relative z-10">
                 <div className={`w-full lg:w-1/2 relative ${variant === 'services' ? 'hidden lg:block' : ''}`}>
-                    <div className="aspect-[4/5] rounded-[40px] overflow-hidden relative shadow-2xl">
+                    <div className="aspect-[4/3] md:aspect-[4/5] rounded-[24px] md:rounded-[40px] overflow-hidden relative shadow-2xl">
                         <img 
                             src={resolveImage(variant === 'home' ? "bus-fleet.jpg" : "truck-fleet.png")} 
                             alt="Elite Fleet" 
@@ -34,7 +34,7 @@ export default function FeaturesSection({ variant = "home" }) {
                     <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 border border-amber-500/30 rounded-full bg-amber-500/10">
                         <span className="text-amber-500 font-bold tracking-[0.2em] uppercase text-xs">{featuresContent.badge}</span>
                     </div>
-                    <h2 className="text-5xl font-black italic uppercase text-white tracking-tighter mb-6">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase text-white tracking-tighter mb-6">
                         {featuresContent.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">{featuresContent.highlight}</span> {featuresContent.suffix}
                     </h2>
                     {variant === 'home' && (

@@ -20,7 +20,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="bg-[#0B0F19] min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+    <div className="bg-[#0B0F19] min-h-screen flex flex-col selection:bg-amber-500 selection:text-black overflow-x-hidden">
       <Navbar />
       <ScrollToTop />
       <div className="flex-grow">

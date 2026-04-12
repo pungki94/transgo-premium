@@ -3,7 +3,7 @@ import { Facebook, Instagram, Twitter, Linkedin, MapPin, Mail, Phone, Send, Bus 
 
 export default function Footer() {
     return (
-        <footer className="bg-[#0B0F19] pt-20 pb-8 text-white font-sans border-t border-white/5 relative overflow-hidden">
+        <footer className="bg-[#0B0F19] pt-12 md:pt-20 pb-8 text-white font-sans border-t border-white/5 relative overflow-hidden">
             {/* Ambient Background Glow */}
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -102,7 +102,7 @@ export default function Footer() {
                     </div>
                 </div>
                 
-                <div className="flex flex-col md:flex-row justify-between items-center text-[12px] text-slate-500 pt-8 mt-14 mb-2 border-t border-white/5 gap-4 md:gap-0 font-medium tracking-wide">
+                <div className="flex flex-col md:flex-row justify-between items-center text-[12px] text-slate-500 pt-6 md:pt-8 mt-10 md:mt-14 mb-2 border-t border-white/5 gap-4 md:gap-0 font-medium tracking-wide">
                     <p>
                         © Copyright <span className="text-white">TransElite</span> 2026. All Rights Reserved.
                     </p>

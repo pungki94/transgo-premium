@@ -23,14 +23,14 @@ export default function Home() {
             <FeaturesSection variant="home" />
 
             {/* 3. FLEET SHOWCASE */}
-            <section className="py-24 relative z-10">
+            <section className="py-16 md:py-24 relative z-10">
                 <div className="max-w-[85rem] mx-auto px-6 lg:px-12">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6">
                         <div>
                             <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 border border-amber-500/30 rounded-full bg-amber-500/10">
                                 <span className="text-amber-500 font-bold tracking-[0.2em] uppercase text-xs">Our Vehicles</span>
                             </div>
-                            <h2 className="text-5xl lg:text-6xl font-black italic uppercase text-white tracking-tighter">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase text-white tracking-tighter">
                                 Elite <span className="text-amber-500">Fleet</span>
                             </h2>
                         </div>
@@ -73,7 +73,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-b from-[#080B13] to-[#0B0F19] z-0" />
                 
                 <div className="max-w-[70rem] mx-auto px-6 relative z-10 text-center">
-                    <h2 className="text-5xl lg:text-[4rem] font-black italic uppercase text-white tracking-tighter mb-6 leading-none">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[4rem] font-black italic uppercase text-white tracking-tighter mb-4 md:mb-6 leading-none">
                         Ready To Experience <br/>
                         <span className="text-amber-500">Elite Transport?</span>
                     </h2>

@@ -4,20 +4,20 @@ import { testimonials, testimonialsContent } from '../data/testimonials';
 
 export default function TestimonialsSection() {
     return (
-        <section className="py-24 relative z-10">
+        <section className="py-16 md:py-24 relative z-10">
             <div className="max-w-[85rem] mx-auto px-6 lg:px-12">
-                <div className="text-center mb-16">
+                <div className="text-center mb-10 md:mb-16">
                     <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 border border-amber-500/30 rounded-full bg-amber-500/10">
                         <span className="text-amber-500 font-bold tracking-[0.2em] uppercase text-xs">{testimonialsContent.badge}</span>
                     </div>
-                    <h2 className="text-5xl lg:text-6xl font-black italic uppercase text-white tracking-tighter">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase text-white tracking-tighter">
                         {testimonialsContent.title} <span className="text-amber-500">{testimonialsContent.highlight}</span>
                     </h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {testimonials.map((t, i) => (
-                        <div key={i} className="p-8 bg-white/5 border border-white/5 rounded-[40px] hover:border-amber-500/30 transition-colors">
+                        <div key={i} className="p-6 md:p-8 bg-white/5 border border-white/5 rounded-[24px] md:rounded-[40px] hover:border-amber-500/30 transition-colors">
                             <div className="flex gap-1 text-amber-500 mb-6">
                                 {[...Array(5)].map((_, j) => <Star key={j} size={16} fill="currentColor" />)}
                             </div>

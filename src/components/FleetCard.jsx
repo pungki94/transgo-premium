@@ -9,20 +9,20 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
     return (
         <>
             <div
-                className="group relative h-[450px] rounded-[50px] overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-white/5 cursor-pointer"
+                className="group relative h-[350px] md:h-[450px] rounded-[24px] md:rounded-[50px] overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-white/5 cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
             >
                 <img src={img} className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:blur-sm" alt={name} />
 
                 {/* Default overlay visible initially */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#080B13] via-black/20 to-transparent p-10 flex flex-col justify-end transition-opacity duration-500 group-hover:opacity-0">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#080B13] via-black/20 to-transparent p-6 md:p-10 flex flex-col justify-end transition-opacity duration-500 group-hover:opacity-0">
                     <span className="bg-amber-500 text-[#0B0F19] w-fit px-3 py-1 rounded-md text-[10px] font-black uppercase mb-3 italic">{type}</span>
                     <h3 className="text-white text-3xl font-black uppercase italic mb-1">{name}</h3>
                     <p className="text-amber-500 font-bold uppercase tracking-widest text-xs">{cap}</p>
                 </div>
 
                 {/* Hover details overlay */}
-                <div className="absolute inset-0 bg-[#0B0F19]/90 backdrop-blur-md p-10 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="absolute inset-0 bg-[#0B0F19]/90 backdrop-blur-md p-6 md:p-10 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="absolute top-8 right-8 text-amber-500 bg-white/5 p-2 rounded-xl group-hover:scale-110 transition-transform">
                         <Maximize2 size={24} />
                     </div>
@@ -64,7 +64,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                             initial={{ opacity: 0, scale: 0.95, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 30 }}
-                            className="relative w-full max-w-5xl bg-[#080B13] rounded-[40px] shadow-2xl overflow-hidden border border-white/10 z-10 flex flex-col md:flex-row max-h-[90vh]"
+                            className="relative w-full max-w-5xl bg-[#080B13] rounded-[24px] md:rounded-[40px] shadow-2xl overflow-hidden border border-white/10 z-10 flex flex-col md:flex-row max-h-[90vh]"
                         >
                             <button
                                 onClick={() => setIsModalOpen(false)}
@@ -77,7 +77,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                                 <img src={img} alt={name} className="w-full h-full object-cover" />
                             </div>
 
-                            <div className="w-full md:w-1/2 p-8 md:p-14 overflow-y-auto custom-scrollbar">
+                            <div className="w-full md:w-1/2 p-6 md:p-8 lg:p-14 overflow-y-auto custom-scrollbar">
                                 <span className="bg-amber-500/10 border border-amber-500/20 text-amber-500 w-fit px-3 py-1 rounded-md text-[10px] font-black uppercase mb-4 italic block">{type}</span>
                                 <h3 className="text-white text-4xl lg:text-5xl font-black uppercase italic mb-2 tracking-tight">{name}</h3>
                                 <p className="text-amber-500 font-bold uppercase tracking-widest mb-10">{cap}</p>

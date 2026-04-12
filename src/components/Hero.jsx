@@ -64,7 +64,7 @@ export default function Hero() {
     const activeSlide = slides[current];
 
     return (
-        <section id="home" className="relative min-h-screen flex items-center bg-[#0B0F19] overflow-hidden pt-28 pb-16">
+        <section id="home" className="relative min-h-screen flex items-center bg-[#0B0F19] overflow-hidden pt-20 md:pt-28 pb-10 md:pb-16">
             {/* Ambient Background Glows */}
             <div className="absolute top-[10%] left-[-10%] w-[40rem] h-[40rem] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
