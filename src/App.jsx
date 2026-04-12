@@ -10,6 +10,7 @@ import About from './pages/About';
 import Services from './pages/Services';
 import OurFleet from './pages/OurFleet';
 import Contact from './pages/Contact';
+import WhatsAppFAB from './components/WhatsAppFAB';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>
+      <WhatsAppFAB />
       <Footer />
     </div>
   );

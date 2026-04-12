@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
     const location = useLocation();
-    
+
     const navLinks = [
         { name: 'HOME', path: '/' },
         { name: 'ABOUT US', path: '/about' },
@@ -36,9 +36,9 @@ export default function Navbar() {
                     {navLinks.map((link) => {
                         const isActive = location.pathname === link.path;
                         return (
-                            <Link 
-                                key={link.name} 
-                                to={link.path} 
+                            <Link
+                                key={link.name}
+                                to={link.path}
                                 className={`text-[12px] font-bold tracking-widest uppercase transition-colors relative flex flex-col justify-center h-full group ${isActive ? 'text-amber-500' : 'text-slate-400 hover:text-amber-500'}`}
                             >
                                 {link.name}
@@ -50,10 +50,10 @@ export default function Navbar() {
 
                 {/* Contact Info */}
                 <div className="hidden xl:flex items-center gap-10 ml-auto z-10">
-                    <div className="flex items-center gap-3 text-white">
+                    <a href="https://wa.me/6287788332767" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white hover:text-amber-500 transition-colors">
                         <Phone size={16} className="text-amber-500" strokeWidth={2.5} />
-                        <span className="text-[14px] font-black italic tracking-wide">+62 21 5500 123</span>
-                    </div>
+                        <span className="text-[14px] font-black italic tracking-wide">+6287788332767</span>
+                    </a>
                     <div className="flex items-center gap-3 text-white">
                         <MapPin size={16} className="text-white" />
                         <span className="text-[14px] font-bold tracking-wide">193 Steele Street, NY</span>

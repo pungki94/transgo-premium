@@ -8,12 +8,12 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
 
     return (
         <>
-            <div 
-                className="group relative h-[450px] rounded-[50px] overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-white/5 cursor-pointer" 
+            <div
+                className="group relative h-[450px] rounded-[50px] overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-white/5 cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
             >
                 <img src={img} className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:blur-sm" alt={name} />
-                
+
                 {/* Default overlay visible initially */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#080B13] via-black/20 to-transparent p-10 flex flex-col justify-end transition-opacity duration-500 group-hover:opacity-0">
                     <span className="bg-amber-500 text-[#0B0F19] w-fit px-3 py-1 rounded-md text-[10px] font-black uppercase mb-3 italic">{type}</span>
@@ -29,7 +29,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                     <span className="bg-amber-500 text-[#0B0F19] w-fit px-3 py-1 rounded-md text-[10px] font-black uppercase mb-4 italic">{type}</span>
                     <h3 className="text-white text-2xl font-black uppercase italic mb-2">{name}</h3>
                     <p className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-6">{cap}</p>
-                    
+
                     {features.length > 0 && (
                         <ul className="flex flex-col gap-3 mb-8">
                             {features.map((feat, idx) => (
@@ -40,7 +40,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                         </ul>
                     )}
 
-                    <div 
+                    <div
                         className="mt-auto inline-flex items-center justify-between bg-amber-500 text-[#0B0F19] px-6 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all duration-300"
                     >
                         <span>View Details</span>
@@ -53,20 +53,20 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
             <AnimatePresence>
                 {isModalOpen && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsModalOpen(false)}
                             className="absolute inset-0 bg-[#0B0F19]/90 backdrop-blur-sm cursor-pointer"
                         />
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 30 }}
                             className="relative w-full max-w-5xl bg-[#080B13] rounded-[40px] shadow-2xl overflow-hidden border border-white/10 z-10 flex flex-col md:flex-row max-h-[90vh]"
                         >
-                            <button 
+                            <button
                                 onClick={() => setIsModalOpen(false)}
                                 className="absolute top-6 right-6 w-12 h-12 bg-[#0B0F19]/50 hover:bg-amber-500 text-white hover:text-[#0B0F19] rounded-full flex items-center justify-center transition-colors z-20 backdrop-blur-md border border-white/10 hover:border-transparent"
                             >
@@ -99,14 +99,16 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row gap-4 mt-auto">
-                                    <Link 
-                                        to="/contact" 
+                                    <a
+                                        href={`https://wa.me/6287788332767?text=${encodeURIComponent(`Halo TransElite, saya tertarik untuk menyewa armada *${name}* (${type} - ${cap}). Mohon informasi lebih lanjut mengenai harga dan ketersediaan.`)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         onClick={() => setIsModalOpen(false)}
                                         className="flex-1 inline-flex items-center justify-center gap-3 bg-amber-500 text-[#0B0F19] px-6 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-transform"
                                     >
                                         Book Fleet <ArrowRight size={18} />
-                                    </Link>
-                                    <button 
+                                    </a>
+                                    <button
                                         onClick={() => setIsModalOpen(false)}
                                         className="flex-none inline-flex items-center justify-center px-8 py-5 rounded-2xl font-bold uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
                                     >

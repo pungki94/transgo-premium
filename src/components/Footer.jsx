@@ -73,7 +73,7 @@ export default function Footer() {
                                     <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500 transition-colors duration-300">
                                         <Phone size={14} className="text-amber-500 group-hover:text-[#0B0F19] transition-colors duration-300" />
                                     </div>
-                                    <span className="mt-0.5 group-hover:text-amber-500 transition-colors cursor-default">+62 21 5500 123</span>
+                                    <a href="https://wa.me/6287788332767" target="_blank" rel="noopener noreferrer" className="mt-0.5 hover:text-amber-500 transition-colors">+62 877 8833 2767</a>
                                 </li>
                             </ul>
                         </div>

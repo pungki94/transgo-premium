@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Clock, Award } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useSelector } from 'react-redux';
-import { resolveImage } from '../utils/assets';
+import { resolveSlideImage } from '../utils/assets';
+import { slides } from '../data/slides';
 
 const slideVariants = {
     enter: (direction) => ({
@@ -33,7 +33,6 @@ const slideVariants = {
 };
 
 export default function Hero() {
-    const { slides } = useSelector(state => state.transport);
     const [current, setCurrent] = useState(0);
     const [direction, setDirection] = useState(1);
     const [isPaused, setIsPaused] = useState(false);
@@ -44,14 +43,16 @@ export default function Hero() {
     }, [current]);
 
     const nextSlide = useCallback(() => {
+        if (!slides || slides.length === 0) return;
         setDirection(1);
         setCurrent((prev) => (prev + 1) % slides.length);
-    }, []);
+    }, [slides]);
 
     const prevSlide = useCallback(() => {
+        if (!slides || slides.length === 0) return;
         setDirection(-1);
         setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
-    }, []);
+    }, [slides]);
 
     // Auto-rotate every 5 seconds
     useEffect(() => {
@@ -123,7 +124,15 @@ export default function Hero() {
                     onMouseLeave={() => setIsPaused(false)}
                 >
                     {!activeSlide ? (
-                        <div className="text-amber-500 animate-pulse font-bold tracking-widest uppercase">Loading Fleet Data...</div>
+                        <div className="relative w-full aspect-square sm:aspect-auto lg:aspect-auto h-full lg:h-full lg:w-full max-w-[500px] lg:max-w-none mx-auto opacity-50">
+                            <div className="absolute inset-0 border border-amber-500/10 rounded-[2rem] lg:rounded-[3rem] rotate-2 lg:rotate-3 scale-95" />
+                            <div className="absolute inset-0 border border-white/5 rounded-[2rem] lg:rounded-[3rem] -rotate-2 lg:-rotate-3 scale-95" />
+                            <div className="absolute inset-2 sm:inset-4 lg:inset-4 xl:inset-6 rounded-[1.8rem] lg:rounded-[3rem] bg-white/5 animate-pulse ring-1 ring-white/10 flex items-center justify-center">
+                                <div className="flex flex-col items-center gap-4">
+                                    <div className="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+                                </div>
+                            </div>
+                        </div>
                     ) : (
                     <div className="relative w-full aspect-square sm:aspect-auto lg:aspect-auto h-full lg:h-full lg:w-full max-w-[500px] lg:max-w-none mx-auto">
                         {/* Decorative Background Frame */}
@@ -138,7 +147,7 @@ export default function Hero() {
                         <AnimatePresence initial={false} custom={direction} mode="wait">
                             <motion.img
                                 key={activeSlide.id}
-                                src={resolveImage(activeSlide.image)}
+                                src={resolveSlideImage(activeSlide.image)}
                                 alt={activeSlide.alt}
                                 className="absolute inset-0 w-full h-full object-cover"
                                 custom={direction}

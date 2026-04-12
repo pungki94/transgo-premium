@@ -5,3 +5,9 @@ export const resolveImage = (imgName) => {
     // This eliminates the need for any hardcoded imports.
     return new URL(`../assets/fleets/${imgName}`, import.meta.url).href;
 };
+
+export const resolveSlideImage = (imgName) => {
+    if (!imgName) return '';
+    if (imgName.startsWith('http')) return imgName;
+    return new URL(`../assets/hero/${imgName}`, import.meta.url).href;
+};

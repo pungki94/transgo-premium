@@ -2,18 +2,23 @@ import { configureStore, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { api } from '../api';
 
 export const fetchAllData = createAsyncThunk('transport/fetchAllData', async () => {
-    const [services, fleets, slides, features, testimonials, stats, steps, coverageAreas] = await Promise.all([
-        api.getServices(),
-        api.getFleets(),
-        api.getSlides(),
-        api.getFeatures(),
-        api.getTestimonials(),
-        api.getStats(),
-        api.getSteps(),
-        api.getCoverageAreas()
+    const results = await Promise.allSettled([
+        api.getFleets()
     ]);
-    return { services, fleets, slides, features, testimonials, stats, steps, coverageAreas };
+    const getValue = (idx, fallback) => results[idx].status === 'fulfilled' ? results[idx].value : fallback;
+    return {
+        fleets: getValue(0, [])
+    };
 });
+
+const loadFromCache = (key, fallback) => {
+    try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : fallback;
+    } catch {
+        return fallback;
+    }
+};
 
 const transportSlice = createSlice({
     name: 'transport',
@@ -21,14 +26,7 @@ const transportSlice = createSlice({
         activeFilter: 'All',
         loading: false,
         error: null,
-        services: [],
-        fleets: [],
-        slides: [],
-        features: [],
-        testimonials: [],
-        stats: null,
-        steps: [],
-        coverageAreas: []
+        fleets: loadFromCache('transgo_fleets', [])
     },
     reducers: {
         setFilter: (state, action) => {
@@ -41,7 +39,14 @@ const transportSlice = createSlice({
         });
         builder.addCase(fetchAllData.fulfilled, (state, action) => {
             state.loading = false;
-            Object.assign(state, action.payload);
+            state.fleets = action.payload.fleets;
+            
+            // Cache to local storage
+            try {
+                localStorage.setItem('transgo_fleets', JSON.stringify(action.payload.fleets));
+            } catch (error) {
+                console.error("Could not save to localStorage", error);
+            }
         });
         builder.addCase(fetchAllData.rejected, (state, action) => {
             state.loading = false;
