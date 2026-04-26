@@ -69,10 +69,10 @@ export default function Hero() {
             <div className="absolute top-[10%] left-[-10%] w-[40rem] h-[40rem] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="relative z-10 max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-12 w-full flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-16 items-center">
+            <div className="relative z-10 max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-12 w-full flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-20 items-center">
                 
                 {/* Left: Text Content */}
-                <div className="flex flex-col items-center text-center lg:items-start lg:text-left text-white w-full lg:col-span-5 relative z-20 mt-4 lg:mt-0">
+                <div className="flex flex-col items-center text-center lg:items-start lg:text-left text-white w-full lg:col-span-5 relative z-20 mt-4 lg:mt-0 lg:pr-8 xl:pr-12">
                     <div className="inline-flex items-center gap-2 mb-4 lg:mb-6 px-3 py-1.5 sm:px-4 sm:py-2 border border-amber-500/30 rounded-full bg-amber-500/10">
                         <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
                         <span className="text-amber-500 font-bold tracking-widest sm:tracking-[0.2em] uppercase text-[9px] sm:text-xs">Premium Logistics & Travel</span>
@@ -80,7 +80,7 @@ export default function Hero() {
                     
                     <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] xl:text-[6rem] font-black italic uppercase leading-[0.95] sm:leading-[0.9] mb-4 sm:mb-6 tracking-tighter drop-shadow-2xl">
                         ELITE <br className="hidden lg:block"/> 
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 inline-block pr-5">
                             TRANSPORT
                         </span> <br className="hidden lg:block"/> 
                         SOLUTIONS.
@@ -119,7 +119,7 @@ export default function Hero() {
 
                 {/* Right: Slider Visual */}
                 <div
-                    className="relative w-full h-[45vh] sm:h-[55vh] lg:min-h-[650px] xl:min-h-[750px] flex items-center justify-center lg:col-span-7 group/slider perspective-1000 mt-2 lg:mt-0"
+                    className="relative w-full h-[45vh] sm:h-[55vh] lg:min-h-[650px] xl:min-h-[750px] flex items-center justify-center lg:col-span-7 group/slider perspective-1000 mt-2 lg:mt-0 lg:pl-10 xl:pl-16"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                 >

@@ -13,30 +13,30 @@ export default function OurFleet() {
 
     return (
         <div className="bg-[#0B0F19] min-h-screen font-sans pt-[60px] md:pt-[75px]">
-            <section id="fleet" className="py-16 md:py-24 relative z-10 border-b border-white/5">
+            <section id="fleet" className="py-8 md:py-12 relative z-10 border-b border-white/5">
                 <div className="absolute top-0 right-1/4 w-[40rem] h-[40rem] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
                 <div className="max-w-[85rem] mx-auto px-6 lg:px-12 relative z-10">
-                    <div className="text-center mb-10 md:mb-16">
-                        <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 border border-amber-500/30 rounded-full bg-amber-500/10">
+                    <div className="text-center mb-6 md:mb-8">
+                        <div className="inline-flex items-center gap-2 mb-3 px-4 py-1.5 border border-amber-500/30 rounded-full bg-amber-500/10">
                             <span className="text-amber-500 font-bold tracking-[0.2em] uppercase text-xs">Our Vehicles</span>
                         </div>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black italic uppercase text-white tracking-tighter">Premium <span className="text-amber-500">Fleet</span></h1>
-                        <p className="text-slate-400 text-lg mt-6 max-w-2xl mx-auto">Eksplorasi armada premium kami yang dirancang khusus untuk kenyamanan eksekutif dan efisiensi logistik kelas berat.</p>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase text-white tracking-tighter">Premium <span className="text-amber-500">Fleet</span></h1>
+                        <p className="text-slate-400 text-base mt-3 max-w-2xl mx-auto">Eksplorasi armada premium kami yang dirancang khusus untuk kenyamanan eksekutif dan efisiensi logistik kelas berat.</p>
                     </div>
-                    <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10 md:mb-16">
+                    <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8">
                         {categories.map((cat) => (
                             <button key={cat} onClick={() => dispatch(setFilter(cat))}
                                 className={`px-5 md:px-8 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 border ${activeFilter === cat ? 'bg-amber-500 text-[#0B0F19] border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-105' : 'bg-white/5 text-slate-400 border-white/10 hover:border-amber-500/50 hover:text-amber-500'}`}>{cat}</button>
                         ))}
                     </div>
-                    <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         <AnimatePresence mode='popLayout'>
                             {filteredFleets.map((f) => (
                                 <motion.div key={f.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}>
                                     <FleetCard {...f} img={
                                         f.name?.toLowerCase() === 'mini bus' ? resolveImage('mini-bus.png') :
-                                        f.name?.toLowerCase() === 'medium bus' ? resolveImage('bus-medium.png') :
-                                        resolveImage(f.img)
+                                            f.name?.toLowerCase() === 'medium bus' ? resolveImage('bus-medium.png') :
+                                                resolveImage(f.img)
                                     } />
                                 </motion.div>
                             ))}

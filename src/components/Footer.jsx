@@ -1,7 +1,30 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Linkedin, MapPin, Mail, Phone, Send, Bus } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { renderIcon } from '../utils/icons';
 
 export default function Footer() {
+    const settings = useSelector(state => state.transport.settings);
+
+    // Brand settings from spreadsheet (same as Navbar)
+    const brandName1 = settings?.brand_name_1 || 'TRANS';
+    const brandName2 = settings?.brand_name_2 || 'ELITE';
+    const brandIcon = settings?.brand_icon || 'Bus';
+    const brandBgColor = settings?.brand_bg_color || '#f59e0b';
+    const brandTextColor1 = settings?.brand_text_color_1 || '#0B0F19';
+    const brandTextColor2 = settings?.brand_text_color_2 || '#ffffff';
+    const brandIconBg = settings?.brand_icon_bg || '#0B0F19';
+    const brandIconColor = settings?.brand_icon_color || '#f59e0b';
+
+    // Render logo icon dynamically
+    const LogoIcon = () => {
+        const icon = renderIcon(brandIcon, {
+            size: 28,
+            fill: "currentColor"
+        });
+        return icon || <Bus size={28} fill="currentColor" />;
+    };
+
     return (
         <footer className="bg-[#0B0F19] pt-12 md:pt-20 pb-8 text-white font-sans border-t border-white/5 relative overflow-hidden">
             {/* Ambient Background Glow */}
@@ -9,16 +32,18 @@ export default function Footer() {
 
             <div className="max-w-[85rem] mx-auto px-6 lg:px-12 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-12 lg:gap-8 xl:gap-16">
-                    
+
                     {/* Brand Column */}
-                    <div className="col-span-1 lg:col-span-3 flex flex-col items-center lg:items-start pr-0 lg:pr-8 text-center lg:text-left">
-                        <div className="flex items-center gap-3 font-black italic mb-6">
-                            <div className="bg-amber-500 p-2 rounded-xl text-[#0B0F19] shrink-0">
-                                <Bus size={28} fill="currentColor" />
+                    <div className="col-span-1 lg:col-span-3 flex flex-col items-start pr-0 lg:pr-8 text-left">
+                        <div className="flex items-center gap-1.5 lg:gap-2 font-black italic mb-6 px-3 py-2 rounded-lg" style={{ backgroundColor: brandBgColor }}>
+                            <div className="p-1 lg:p-1.5 rounded-lg shrink-0" style={{ backgroundColor: brandIconBg, color: brandIconColor }}>
+                                <LogoIcon />
                             </div>
-                            <span className="text-white text-3xl tracking-wide uppercase leading-none">TRANS<span className="text-amber-500">ELITE</span></span>
+                            <span className="text-lg md:text-xl lg:text-2xl tracking-wide uppercase leading-none" style={{ color: brandTextColor1 }}>
+                                {brandName1}<span style={{ color: brandTextColor2 }}>{brandName2}</span>
+                            </span>
                         </div>
-                        
+
                         <p className="text-slate-400 text-[13px] leading-relaxed mb-8 max-w-sm">
                             Providing top-tier transport and logistics solutions. Your reliable partner in moving your business forward with confidence.
                         </p>
@@ -57,23 +82,23 @@ export default function Footer() {
                         <div className="flex flex-col lg:col-span-2 lg:pl-4 xl:pl-0">
                             <h4 className="font-bold text-white tracking-wide text-[15px] mb-6 whitespace-nowrap">Contact Us</h4>
                             <ul className="flex flex-col gap-5 text-[13px] text-slate-400">
-                                <li className="flex items-start gap-4 group cursor-default">
+                                <li className="flex items-center gap-4 group cursor-default">
                                     <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500 transition-colors duration-300">
                                         <MapPin size={14} className="text-amber-500 group-hover:text-[#0B0F19] transition-colors duration-300" />
                                     </div>
-                                    <span className="leading-relaxed mt-[5px]">193 Steele Street,<br/>New York, NY 10001</span>
+                                    <span className="leading-relaxed">193 Steele Street,<br />New York, NY 10001</span>
                                 </li>
                                 <li className="flex items-center gap-4 group">
                                     <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500 transition-colors duration-300">
                                         <Mail size={14} className="text-amber-500 group-hover:text-[#0B0F19] transition-colors duration-300" />
                                     </div>
-                                    <a href="mailto:info@transelite.com" className="hover:text-amber-500 transition-colors mt-0.5">info@transelite.com</a>
+                                    <a href="mailto:info@transelite.com" className="hover:text-amber-500 transition-colors">info@transelite.com</a>
                                 </li>
                                 <li className="flex items-center gap-4 group">
                                     <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500 transition-colors duration-300">
                                         <Phone size={14} className="text-amber-500 group-hover:text-[#0B0F19] transition-colors duration-300" />
                                     </div>
-                                    <a href="https://wa.me/6287788332767" target="_blank" rel="noopener noreferrer" className="mt-0.5 hover:text-amber-500 transition-colors">+62 877 8833 2767</a>
+                                    <a href="https://wa.me/6287788332767" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500 transition-colors">+62 877 8833 2767</a>
                                 </li>
                             </ul>
                         </div>
@@ -85,13 +110,13 @@ export default function Footer() {
                                 Stay updated with our latest news and special offers. We promise not to spam your inbox.
                             </p>
                             <form className="relative flex items-center w-full max-w-sm">
-                                <input 
-                                    type="email" 
-                                    placeholder="Enter your email" 
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
                                     className="w-full bg-white/5 text-white placeholder:text-slate-500 text-[13px] px-5 py-3.5 pr-14 rounded-full outline-none border border-white/10 focus:border-amber-500/50 transition-colors"
                                 />
-                                <button 
-                                    type="submit" 
+                                <button
+                                    type="submit"
                                     aria-label="Subscribe"
                                     className="absolute right-1 w-9 h-9 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 hover:bg-amber-500 hover:text-[#0B0F19] transition-all duration-300 border border-transparent hover:border-amber-500"
                                 >
@@ -101,15 +126,12 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-                
-                <div className="flex flex-col md:flex-row justify-between items-center text-[12px] text-slate-500 pt-6 md:pt-8 mt-10 md:mt-14 mb-2 border-t border-white/5 gap-4 md:gap-0 font-medium tracking-wide">
+
+                <div className="flex flex-col md:flex-row justify-center items-center text-[12px] text-slate-500 pt-6 md:pt-8 mt-10 md:mt-14 mb-2 border-t border-white/5 gap-4 md:gap-0 font-medium tracking-wide">
                     <p>
-                        © Copyright <span className="text-white">TransElite</span> 2026. All Rights Reserved.
+                        Made With <span className="text-amber-700">❤️</span>© 2025 PT
+                        Integrasi Performa Amanah (Grasfam). All Rights Reserved.
                     </p>
-                    <div className="flex gap-6">
-                        <Link to="/terms" className="hover:text-amber-500 transition-colors">Terms of Service</Link>
-                        <Link to="/privacy" className="hover:text-amber-500 transition-colors">Privacy Policy</Link>
-                    </div>
                 </div>
 
             </div>

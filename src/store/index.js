@@ -3,11 +3,13 @@ import { api } from '../api';
 
 export const fetchAllData = createAsyncThunk('transport/fetchAllData', async () => {
     const results = await Promise.allSettled([
-        api.getFleets()
+        api.getFleets(),
+        api.getSettings()
     ]);
     const getValue = (idx, fallback) => results[idx].status === 'fulfilled' ? results[idx].value : fallback;
     return {
-        fleets: getValue(0, [])
+        fleets: getValue(0, []),
+        settings: getValue(1, {})
     };
 });
 
@@ -26,7 +28,8 @@ const transportSlice = createSlice({
         activeFilter: 'All',
         loading: false,
         error: null,
-        fleets: loadFromCache('transgo_fleets', [])
+        fleets: loadFromCache('transgo_fleets', []),
+        settings: { brand_name_1: 'TRANS', brand_name_2: 'ELITE' }
     },
     reducers: {
         setFilter: (state, action) => {
@@ -40,8 +43,12 @@ const transportSlice = createSlice({
         builder.addCase(fetchAllData.fulfilled, (state, action) => {
             state.loading = false;
             state.fleets = action.payload.fleets;
+            // Settings always use fresh API data (no merge with stale cache)
+            if (Object.keys(action.payload.settings).length > 0) {
+                state.settings = action.payload.settings;
+            }
             
-            // Cache to local storage
+            // Cache to local storage (fleets only, settings are always fresh)
             try {
                 localStorage.setItem('transgo_fleets', JSON.stringify(action.payload.fleets));
             } catch (error) {

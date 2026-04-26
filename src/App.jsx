@@ -23,7 +23,7 @@ function App() {
     <div className="bg-[#0B0F19] min-h-screen flex flex-col selection:bg-amber-500 selection:text-black overflow-x-hidden">
       <Navbar />
       <ScrollToTop />
-      <div className="flex-grow">
+      <div className="flex-grow flex flex-col">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

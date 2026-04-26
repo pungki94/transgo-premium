@@ -13,5 +13,6 @@ const fetchData = async (endpoint) => {
 
 export const api = {
     getFleets: () => fetchData('/fleets'),
-    getHero: () => fetchData('/hero')
+    getHero: () => fetchData('/hero'),
+    getSettings: () => fetchData('/settings')
 };
