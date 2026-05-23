@@ -22,7 +22,7 @@ app.use('/api', (req, res, next) => {
 
 // In-memory cache for sheet data (survives API outages)
 const sheetCache = {};
-const CACHE_TTL = 2 * 1000; // 2 seconds — very short TTL so spreadsheet edits reflect fast
+const CACHE_TTL = 10 * 1000; // 2 seconds — very short TTL so spreadsheet edits reflect fast
 
 // Helper: fetch data from Google Sheets API v4 with caching
 async function fetchSheet(sheetName) {

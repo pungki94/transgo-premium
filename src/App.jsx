@@ -32,7 +32,7 @@ function App() {
         clearTimeout(visibilityTimer);
         visibilityTimer = setTimeout(() => {
           dispatch(fetchAllData());
-        }, 500); // 2s debounce — wait for tab to settle
+        }, 1000); // 2s debounce — wait for tab to settle
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);

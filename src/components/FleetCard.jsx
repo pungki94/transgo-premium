@@ -15,7 +15,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                 <img src={img} className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:blur-sm" alt={name} />
 
                 {/* Default overlay visible initially */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#080B13] via-black/20 to-transparent p-4 md:p-5 flex flex-col justify-end transition-opacity duration-500 group-hover:opacity-0">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#080B13]/80 via-transparent to-transparent p-4 md:p-5 flex flex-col justify-end transition-opacity duration-500 group-hover:opacity-0">
                     <span className="bg-amber-500 text-[#0B0F19] w-fit px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase mb-1.5 italic">{type}</span>
                     <h3 className="text-white text-lg md:text-xl font-black uppercase italic mb-0.5 leading-tight line-clamp-2 md:line-clamp-1">{name}</h3>
                     <p className="text-amber-500 font-bold uppercase tracking-widest text-[10px] truncate">{cap}</p>

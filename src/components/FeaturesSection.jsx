@@ -22,9 +22,9 @@ export default function FeaturesSection({ variant = "home" }) {
                         <img
                             src={resolveImage(variant === 'home' ? "bus-fleet.jpg" : "truck-fleet.png")}
                             alt="Elite Fleet"
-                            className={`w-full h-full object-cover ${variant === 'services' ? 'grayscale hover:grayscale-0 transition-all duration-700' : ''}`}
+                            className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-black/20 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19]/80 via-transparent to-transparent" />
                         <div className="absolute bottom-10 left-10 right-10 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
                             <div className="flex items-center gap-4 mb-2">
                                 <div className="text-amber-500 bg-amber-500/20 p-2 rounded-lg">

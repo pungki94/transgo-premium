@@ -43,7 +43,6 @@ export default function Services() {
                     <div className="w-full lg:w-1/2 relative">
                         <div className="aspect-[4/3] rounded-[24px] md:rounded-[40px] overflow-hidden shadow-2xl relative">
                             <img src={resolveImage("bus-fleet.jpg")} className="w-full h-full object-cover" alt="Service Detail" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] to-transparent"></div>
                         </div>
                     </div>
                 </div>

@@ -61,7 +61,6 @@ export default function About() {
                     <div className="w-full lg:w-1/2">
                         <div className="aspect-square lg:aspect-[4/3] rounded-[24px] md:rounded-[40px] overflow-hidden shadow-2xl relative">
                             <img src={resolveImage("bus-fleet.jpg")} className="w-full h-full object-cover" alt="Company Overview" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent"></div>
                             <div className="absolute bottom-8 left-8 p-4 bg-amber-500 rounded-2xl">
                                 <span className="text-[#0B0F19] font-black text-2xl italic leading-none block px-2">{storyBadge}</span>
                                 <span className="text-[#0B0F19] tracking-widest font-bold text-xs uppercase block px-2 mt-1">{storyBadgeSub}</span>
