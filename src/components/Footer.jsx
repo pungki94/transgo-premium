@@ -20,8 +20,8 @@ export default function Footer() {
     // Contact info from spreadsheet
     const address = contact?.address || '193 Steele Street, New York, NY 10001';
     const email = contact?.email || 'info@transelite.com';
-    const phone = contact?.phone || '+62 877 8833 2767';
-    const waNumber = contact?.wa_number || '6287788332767';
+    const phone = contact?.phone || '+62 877 8203 0286';
+    const waNumber = contact?.wa_number || '6287782030286';
     const footerDesc = contact?.footer_desc || 'Providing top-tier transport and logistics solutions. Your reliable partner in moving your business forward with confidence.';
     const copyright = contact?.copyright || 'Made With ❤️© 2025 PT Integrasi Performa Amanah (Grasfam). All Rights Reserved.';
 

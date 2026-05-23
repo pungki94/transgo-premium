@@ -103,7 +103,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
 
                                 <div className="flex flex-col sm:flex-row gap-4 mt-auto">
                                     <a
-                                        href={`https://wa.me/6287788332767?text=${encodeURIComponent(`Halo TransElite, saya tertarik untuk menyewa armada *${name}* (${type} - ${cap}). Mohon informasi lebih lanjut mengenai harga dan ketersediaan.`)}`}
+                                        href={`https://wa.me/6287782030286?text=${encodeURIComponent(`Halo TransElite, saya tertarik untuk menyewa armada *${name}* (${type} - ${cap}). Mohon informasi lebih lanjut mengenai harga dan ketersediaan.`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         onClick={() => setIsModalOpen(false)}

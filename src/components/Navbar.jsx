@@ -21,8 +21,8 @@ export default function Navbar() {
     const brandIconColor = settings?.brand_icon_color || '#f59e0b';    // amber-500
 
     // Contact info from spreadsheet
-    const phone = contact?.phone || '+62 877 8833 2767';
-    const waNumber = contact?.wa_number || '6287788332767';
+    const phone = contact?.phone || '+62 877 8203 0286';
+    const waNumber = contact?.wa_number || '6287782030286';
     const address = contact?.address || '193 Steele Street, NY';
 
     // Close mobile menu on route change

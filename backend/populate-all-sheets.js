@@ -372,8 +372,8 @@ function populateContactSheet(ss) {
         ['wa_text', 'Halo TransElite, saya ingin bertanya mengenai layanan transportasi Anda. Mohon informasi lebih lanjut.'],
 
         // --- Contact Info ---
-        ['wa_number', '6287788332767'],
-        ['phone', '+62 877 8833 2767'],
+        ['wa_number', '6287782030286'],
+        ['phone', '+62 877 8203 0286'],
         ['email', 'book@transelite.com'],
         ['address', '193 Steele Street, New York, NY 10001'],
 
