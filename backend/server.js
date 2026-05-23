@@ -12,53 +12,86 @@ const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL; // Kept as fallback
 app.use(cors());
 app.use(express.json());
 
-// Set Cache-Control headers for all API routes (Best Practice)
+// Set Cache-Control headers for all API routes — no browser caching so spreadsheet edits reflect immediately
 app.use('/api', (req, res, next) => {
-    res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
     next();
 });
 
-// Helper: fetch data from Google Sheets API v4 (no caching delay)
+// In-memory cache for sheet data (survives API outages)
+const sheetCache = {};
+const CACHE_TTL = 2 * 1000; // 2 seconds — very short TTL so spreadsheet edits reflect fast
+
+// Helper: fetch data from Google Sheets API v4 with caching
 async function fetchSheet(sheetName) {
-    // Primary: use Google Sheets API v4 directly
+    const cacheKey = sheetName;
+    const cached = sheetCache[cacheKey];
+
+    // Return cached data if still within TTL
+    if (cached && cached.data && (Date.now() - cached.timestamp) < CACHE_TTL) {
+        return cached.data;
+    }
+
+    // Try primary: Google Sheets API v4
     if (GOOGLE_SHEETS_ID && GOOGLE_API_KEY) {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_ID}/values/${encodeURIComponent(sheetName)}?key=${GOOGLE_API_KEY}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-            console.warn(`[API] Google Sheets API error for "${sheetName}": ${response.status}`);
-            // Fall through to Apps Script fallback
-        } else {
-            const data = await response.json();
-            if (data.values && data.values.length > 1) {
-                const headers = data.values[0];
-                return data.values.slice(1).map(row => {
-                    const obj = {};
-                    headers.forEach((header, i) => {
-                        obj[header] = row[i] || '';
+        try {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_ID}/values/${encodeURIComponent(sheetName)}?key=${GOOGLE_API_KEY}`;
+            const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.values && data.values.length > 1) {
+                    const headers = data.values[0];
+                    const result = data.values.slice(1).map(row => {
+                        const obj = {};
+                        headers.forEach((header, i) => {
+                            obj[header] = row[i] || '';
+                        });
+                        return obj;
                     });
-                    return obj;
-                });
+                    // Update cache
+                    sheetCache[cacheKey] = { data: result, timestamp: Date.now() };
+                    return result;
+                }
+                sheetCache[cacheKey] = { data: [], timestamp: Date.now() };
+                return [];
+            } else {
+                console.warn(`[API] Google Sheets API error for "${sheetName}": ${response.status}`);
             }
-            return [];
+        } catch (err) {
+            console.warn(`[API] Google Sheets API fetch failed for "${sheetName}": ${err.message}`);
         }
     }
 
     // Fallback: use Google Apps Script
     if (GOOGLE_SCRIPT_URL) {
-        const cacheBuster = Date.now();
-        const url = `${GOOGLE_SCRIPT_URL}?sheet=${sheetName}&_=${cacheBuster}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Failed to fetch sheet "${sheetName}": ${response.status}`);
-        const data = await response.json();
-        if (data && data.error) {
-            console.warn(`[API] Sheet warning for "${sheetName}": ${data.error}`);
-            return [];
+        try {
+            const cacheBuster = Date.now();
+            const url = `${GOOGLE_SCRIPT_URL}?sheet=${sheetName}&_=${cacheBuster}`;
+            const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.error) {
+                    console.warn(`[API] Sheet warning for "${sheetName}": ${data.error}`);
+                } else {
+                    const rows = Array.isArray(data) ? data : (Array.isArray(data.value) ? data.value : []);
+                    sheetCache[cacheKey] = { data: rows, timestamp: Date.now() };
+                    return rows;
+                }
+            }
+        } catch (err) {
+            console.warn(`[API] Apps Script fetch failed for "${sheetName}": ${err.message}`);
         }
-        const rows = Array.isArray(data) ? data : (Array.isArray(data.value) ? data.value : []);
-        return rows;
     }
 
-    throw new Error('No Google Sheets data source configured.');
+    // Final fallback: return cached data if available
+    if (cached && cached.data) {
+        console.log(`[API] Using cached data for "${sheetName}" (age: ${Math.round((Date.now() - cached.timestamp) / 1000)}s)`);
+        return cached.data;
+    }
+
+    return [];
 }
 
 // Helper function to handle async route errors
@@ -70,6 +103,22 @@ const asyncHandler = fn => (req, res, next) => {
 };
 
 // --- ENDPOINTS ---
+
+// Generic: fetch any sheet as array of row objects
+app.get('/api/sheet/:name', asyncHandler(async (req, res) => {
+    const rows = await fetchSheet(req.params.name);
+    res.json(rows);
+}));
+
+// Generic: fetch a key-value style sheet as flat object
+app.get('/api/kv/:name', asyncHandler(async (req, res) => {
+    const rows = await fetchSheet(req.params.name);
+    const kv = {};
+    rows.forEach(row => {
+        if (row.key) kv[row.key] = row.value || '';
+    });
+    res.json(kv);
+}));
 
 app.get('/api/fleets', asyncHandler(async (req, res) => {
     const fleets = await fetchSheet('fleets');
@@ -86,7 +135,6 @@ app.get('/api/hero', asyncHandler(async (req, res) => {
 }));
 
 app.get('/api/settings', asyncHandler(async (req, res) => {
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     const rows = await fetchSheet('settings');
     const settings = {};
     rows.forEach(row => {

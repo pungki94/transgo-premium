@@ -12,7 +12,8 @@ const fetchData = async (endpoint) => {
 };
 
 export const api = {
-    getFleets: () => fetchData('/fleets'),
     getHero: () => fetchData('/hero'),
-    getSettings: () => fetchData('/settings')
+    getSettings: () => fetchData('/settings'),
+    getSheet: (name) => fetchData(`/sheet/${name}`),
+    getKV: (name) => fetchData(`/kv/${name}`),
 };

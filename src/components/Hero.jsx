@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Clock, Award } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 import { resolveSlideImage } from '../utils/assets';
-import { slides } from '../data/slides';
 
 const slideVariants = {
     enter: (direction) => ({
@@ -33,6 +33,9 @@ const slideVariants = {
 };
 
 export default function Hero() {
+    const slides = useSelector(state => state.transport.slides);
+    const homeContent = useSelector(state => state.transport.homeContent);
+
     const [current, setCurrent] = useState(0);
     const [direction, setDirection] = useState(1);
     const [isPaused, setIsPaused] = useState(false);
@@ -63,6 +66,18 @@ export default function Hero() {
 
     const activeSlide = slides[current];
 
+    // Hero text from spreadsheet
+    const heroBadge = homeContent?.hero_badge || 'Premium Logistics & Travel';
+    const heroTitle1 = homeContent?.hero_title_1 || 'ELITE';
+    const heroTitle2 = homeContent?.hero_title_2 || 'TRANSPORT';
+    const heroTitle3 = homeContent?.hero_title_3 || 'SOLUTIONS.';
+    const heroDesc = homeContent?.hero_desc || 'Experience the next generation of transportation with our modern fleet of premium vehicles designed for ultimate comfort, safety, and reliability.';
+    const heroFeature1 = homeContent?.hero_feature_1 || 'Safe & Secure';
+    const heroFeature2 = homeContent?.hero_feature_2 || 'On-Time Always';
+    const heroFeature3 = homeContent?.hero_feature_3 || 'Premium Service';
+    const heroCta1 = homeContent?.hero_cta_1 || 'Explore Fleet';
+    const heroCta2 = homeContent?.hero_cta_2 || 'Book Now';
+
     return (
         <section id="home" className="relative min-h-screen flex items-center bg-[#0B0F19] overflow-hidden pt-20 md:pt-28 pb-10 md:pb-16">
             {/* Ambient Background Glows */}
@@ -75,28 +90,28 @@ export default function Hero() {
                 <div className="flex flex-col items-center text-center lg:items-start lg:text-left text-white w-full lg:col-span-5 relative z-20 mt-4 lg:mt-0 lg:pr-8 xl:pr-12">
                     <div className="inline-flex items-center gap-2 mb-4 lg:mb-6 px-3 py-1.5 sm:px-4 sm:py-2 border border-amber-500/30 rounded-full bg-amber-500/10">
                         <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
-                        <span className="text-amber-500 font-bold tracking-widest sm:tracking-[0.2em] uppercase text-[9px] sm:text-xs">Premium Logistics & Travel</span>
+                        <span className="text-amber-500 font-bold tracking-widest sm:tracking-[0.2em] uppercase text-[9px] sm:text-xs">{heroBadge}</span>
                     </div>
                     
                     <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] xl:text-[6rem] font-black italic uppercase leading-[0.95] sm:leading-[0.9] mb-4 sm:mb-6 tracking-tighter drop-shadow-2xl">
-                        ELITE <br className="hidden lg:block"/> 
+                        {heroTitle1} <br className="hidden lg:block"/> 
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 inline-block pr-5">
-                            TRANSPORT
+                            {heroTitle2}
                         </span> <br className="hidden lg:block"/> 
-                        SOLUTIONS.
+                        {heroTitle3}
                     </h1>
                     
                     <p className="text-slate-400 text-sm sm:text-base lg:text-xl mb-6 sm:mb-10 max-w-xl leading-relaxed mx-auto lg:mx-0">
-                        Experience the next generation of transportation with our modern fleet of premium vehicles designed for ultimate comfort, safety, and reliability.
+                        {heroDesc}
                     </p>
                     
                     <div className="flex flex-col sm:flex-row flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mb-8 sm:mb-12 w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
                         <Link to="/fleet" className="group flex justify-center items-center gap-2 sm:gap-3 bg-amber-500 text-[#0B0F19] px-6 py-3 sm:px-8 sm:py-4 rounded-xl font-black uppercase text-xs sm:text-sm tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:-translate-y-1 text-center w-full sm:w-auto">
-                            Explore Fleet
+                            {heroCta1}
                             <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
                         <Link to="/contact" className="flex justify-center items-center gap-2 sm:gap-3 bg-transparent border border-white/20 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-xl font-bold uppercase text-xs sm:text-sm tracking-widest hover:bg-white/10 transition-all duration-300 w-full sm:w-auto text-center">
-                            Book Now
+                            {heroCta2}
                         </Link>
                     </div>
 
@@ -104,15 +119,15 @@ export default function Hero() {
                     <div className="flex flex-row justify-center lg:justify-start lg:grid lg:grid-cols-3 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-white/10 w-full max-w-xl">
                         <div className="flex flex-col items-center lg:items-start gap-2">
                             <ShieldCheck className="text-amber-500 w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-                            <span className="text-white font-bold text-[10px] sm:text-sm whitespace-nowrap">Safe & Secure</span>
+                            <span className="text-white font-bold text-[10px] sm:text-sm whitespace-nowrap">{heroFeature1}</span>
                         </div>
                         <div className="flex flex-col items-center lg:items-start gap-2">
                             <Clock className="text-amber-500 w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-                            <span className="text-white font-bold text-[10px] sm:text-sm whitespace-nowrap">On-Time Always</span>
+                            <span className="text-white font-bold text-[10px] sm:text-sm whitespace-nowrap">{heroFeature2}</span>
                         </div>
                         <div className="flex flex-col items-center lg:items-start gap-2">
                             <Award className="text-amber-500 w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-                            <span className="text-white font-bold text-[10px] sm:text-sm whitespace-nowrap">Premium Service</span>
+                            <span className="text-white font-bold text-[10px] sm:text-sm whitespace-nowrap">{heroFeature3}</span>
                         </div>
                     </div>
                 </div>

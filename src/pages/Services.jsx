@@ -1,13 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { resolveImage } from '../utils/assets';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 import ServicesSection from '../components/ServicesSection';
+import FeaturesSection from '../components/FeaturesSection';
 import CoverageAreaSection from '../components/CoverageAreaSection';
 
 export default function Services() {
-    
+    const sp = useSelector(state => state.transport.servicesPageContent);
+
+    // Services page text from spreadsheet
+    const ecoTitle1 = sp?.eco_title_1 || 'Comprehensive';
+    const ecoTitle2 = sp?.eco_title_2 || 'Transport Ecosystem';
+    const ecoPara1 = sp?.eco_para_1 || 'TransElite menyediakan ekosistem transportasi hulu ke hilir.';
+    const ecoPara2 = sp?.eco_para_2 || 'Setiap layanan dirancang dengan protokol keamanan ketat dan dukungan kru profesional.';
+    const ecoFeature1 = sp?.eco_feature_1 || 'Terintegrasi penuh dengan ekosistem IT logistik';
+    const ecoFeature2 = sp?.eco_feature_2 || 'Perlindungan asuransi pengiriman komprehensif';
+    const ecoFeature3 = sp?.eco_feature_3 || 'Skalabilitas tinggi untuk proyek tender korporasi';
+
     return (
         <div className="bg-[#0B0F19] min-h-screen font-sans pt-[60px] md:pt-[75px]">
             <ServicesSection isHero={true} />
@@ -16,17 +27,17 @@ export default function Services() {
                 <div className="max-w-[85rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-16">
                     <div className="w-full lg:w-1/2">
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black italic uppercase text-white tracking-tighter mb-6 md:mb-8">
-                            Comprehensive <br/>
-                            <span className="text-amber-500">Transport Ecosystem</span>
+                            {ecoTitle1} <br />
+                            <span className="text-amber-500">{ecoTitle2}</span>
                         </h2>
                         <div className="flex flex-col gap-6 text-slate-400 leading-relaxed text-lg mb-8">
-                            <p>TransElite menyediakan ekosistem transportasi hulu ke hilir.</p>
-                            <p>Setiap layanan dirancang dengan protokol keamanan ketat dan dukungan kru profesional.</p>
+                            <p>{ecoPara1}</p>
+                            <p>{ecoPara2}</p>
                         </div>
                         <ul className="flex flex-col gap-4">
-                            <li className="flex items-center gap-3 text-white font-bold"><CheckCircle2 className="text-amber-500" size={20}/> Terintegrasi penuh dengan ekosistem IT logistik</li>
-                            <li className="flex items-center gap-3 text-white font-bold"><CheckCircle2 className="text-amber-500" size={20}/> Perlindungan asuransi pengiriman komprehensif</li>
-                            <li className="flex items-center gap-3 text-white font-bold"><CheckCircle2 className="text-amber-500" size={20}/> Skalabilitas tinggi untuk proyek tender korporasi</li>
+                            <li className="flex items-center gap-3 text-white font-bold"><CheckCircle2 className="text-amber-500" size={20} /> {ecoFeature1}</li>
+                            <li className="flex items-center gap-3 text-white font-bold"><CheckCircle2 className="text-amber-500" size={20} /> {ecoFeature2}</li>
+                            <li className="flex items-center gap-3 text-white font-bold"><CheckCircle2 className="text-amber-500" size={20} /> {ecoFeature3}</li>
                         </ul>
                     </div>
                     <div className="w-full lg:w-1/2 relative">
@@ -38,24 +49,8 @@ export default function Services() {
                 </div>
             </section>
 
+            <FeaturesSection variant="services" />
             <CoverageAreaSection />
-
-
-            <section className="py-20 relative z-10 border-t border-white/10">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#080B13] to-[#0B0F19] z-0" />
-                <div className="max-w-[70rem] mx-auto px-6 relative z-10 text-center">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[4rem] font-black italic uppercase text-white tracking-tighter mb-4 md:mb-6 leading-none">
-                        Ready To Experience <br/>
-                        <span className="text-amber-500">Elite Transport?</span>
-                    </h2>
-                    <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
-                        Hubungi tim kami sekarang untuk mendapatkan penawaran terbaik.
-                    </p>
-                    <Link to="/contact" className="inline-flex items-center gap-3 bg-amber-500 text-[#0B0F19] px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_40px_rgba(245,158,11,0.4)] transition-all duration-300">
-                        Contact Us Now <ArrowRight size={20} />
-                    </Link>
-                </div>
-            </section>
         </div>
     );
 }

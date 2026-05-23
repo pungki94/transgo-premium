@@ -1,9 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 export default function WhatsAppFAB() {
+    const contact = useSelector(state => state.transport.contact);
+    const waNumber = contact?.wa_number || '6287788332767';
+    const waTooltip = contact?.wa_tooltip || 'Chat With Us';
+
     return (
         <a
-            href="https://wa.me/6287788332767"
+            href={`https://wa.me/${waNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             className="fixed bottom-6 right-6 z-[100] w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center text-white shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:bg-[#128C7E] hover:scale-110 transition-all duration-300 group"
@@ -11,7 +16,7 @@ export default function WhatsAppFAB() {
         >
             {/* Tooltip */}
             <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-[#0B0F19] text-white text-xs font-bold px-3 py-2 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-xl border border-white/10">
-                Chat With Us
+                {waTooltip}
             </span>
             {/* WhatsApp proper SVG icon */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">

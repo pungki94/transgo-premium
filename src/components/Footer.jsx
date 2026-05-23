@@ -5,6 +5,7 @@ import { renderIcon } from '../utils/icons';
 
 export default function Footer() {
     const settings = useSelector(state => state.transport.settings);
+    const contact = useSelector(state => state.transport.contact);
 
     // Brand settings from spreadsheet (same as Navbar)
     const brandName1 = settings?.brand_name_1 || 'TRANS';
@@ -15,6 +16,32 @@ export default function Footer() {
     const brandTextColor2 = settings?.brand_text_color_2 || '#ffffff';
     const brandIconBg = settings?.brand_icon_bg || '#0B0F19';
     const brandIconColor = settings?.brand_icon_color || '#f59e0b';
+
+    // Contact info from spreadsheet
+    const address = contact?.address || '193 Steele Street, New York, NY 10001';
+    const email = contact?.email || 'info@transelite.com';
+    const phone = contact?.phone || '+62 877 8833 2767';
+    const waNumber = contact?.wa_number || '6287788332767';
+    const footerDesc = contact?.footer_desc || 'Providing top-tier transport and logistics solutions. Your reliable partner in moving your business forward with confidence.';
+    const copyright = contact?.copyright || 'Made With ❤️© 2025 PT Integrasi Performa Amanah (Grasfam). All Rights Reserved.';
+
+    // Social media links from spreadsheet
+    const fbLink = contact?.facebook || '#';
+    const igLink = contact?.instagram || '#';
+    const twLink = contact?.twitter || '#';
+    const liLink = contact?.linkedin || '#';
+
+    // Footer labels from spreadsheet
+    const quickLinksTitle = contact?.quick_links_title || 'Quick Links';
+    const contactUsTitle = contact?.contact_us_title || 'Contact Us';
+    const newsletterTitle = contact?.newsletter_title || 'Subscribe Newsletter';
+    const newsletterDesc = contact?.newsletter_desc || 'Stay updated with our latest news and special offers. We promise not to spam your inbox.';
+    const emailPlaceholder = contact?.email_placeholder || 'Enter your email';
+    const menuHome = settings?.menu_home || 'Home';
+    const menuAbout = settings?.menu_about || 'About Us';
+    const menuServices = settings?.menu_services || 'Services';
+    const menuFleet = settings?.menu_fleet || 'Our Fleet';
+    const menuContact = settings?.menu_contact || 'Contact';
 
     // Render logo icon dynamically
     const LogoIcon = () => {
@@ -45,20 +72,20 @@ export default function Footer() {
                         </div>
 
                         <p className="text-slate-400 text-[13px] leading-relaxed mb-8 max-w-sm">
-                            Providing top-tier transport and logistics solutions. Your reliable partner in moving your business forward with confidence.
+                            {footerDesc}
                         </p>
 
                         <div className="flex items-center gap-3 w-full justify-center lg:justify-start">
-                            <a href="#" aria-label="Facebook" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
+                            <a href={fbLink} aria-label="Facebook" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
                                 <Facebook size={16} fill="currentColor" strokeWidth={0} />
                             </a>
-                            <a href="#" aria-label="Instagram" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
+                            <a href={igLink} aria-label="Instagram" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
                                 <Instagram size={14} strokeWidth={2.5} />
                             </a>
-                            <a href="#" aria-label="Twitter" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
+                            <a href={twLink} aria-label="Twitter" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
                                 <Twitter size={14} fill="currentColor" strokeWidth={0} />
                             </a>
-                            <a href="#" aria-label="LinkedIn" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
+                            <a href={liLink} aria-label="LinkedIn" className="w-9 h-9 rounded-full bg-white/5 hover:bg-amber-500 flex items-center justify-center text-slate-300 hover:text-[#0B0F19] transition-all duration-300">
                                 <Linkedin size={14} fill="currentColor" strokeWidth={0} />
                             </a>
                         </div>
@@ -68,51 +95,51 @@ export default function Footer() {
                     <div className="col-span-1 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-10">
                         {/* Quick Link */}
                         <div className="flex flex-col lg:col-span-2">
-                            <h4 className="font-bold text-white tracking-wide text-[15px] mb-6">Quick Links</h4>
+                            <h4 className="font-bold text-white tracking-wide text-[15px] mb-6">{quickLinksTitle}</h4>
                             <ul className="flex flex-col gap-3.5 text-[13px] text-slate-400">
-                                <li><Link to="/" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Home</Link></li>
-                                <li><Link to="/about" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">About Us</Link></li>
-                                <li><Link to="/services" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Services</Link></li>
-                                <li><Link to="/fleet" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Our Fleet</Link></li>
-                                <li><Link to="/contact" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Contact</Link></li>
+                                <li><Link to="/" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuHome}</Link></li>
+                                <li><Link to="/about" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuAbout}</Link></li>
+                                <li><Link to="/services" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuServices}</Link></li>
+                                <li><Link to="/fleet" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuFleet}</Link></li>
+                                <li><Link to="/contact" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuContact}</Link></li>
                             </ul>
                         </div>
 
                         {/* Contact Us */}
                         <div className="flex flex-col lg:col-span-2 lg:pl-4 xl:pl-0">
-                            <h4 className="font-bold text-white tracking-wide text-[15px] mb-6 whitespace-nowrap">Contact Us</h4>
+                            <h4 className="font-bold text-white tracking-wide text-[15px] mb-6 whitespace-nowrap">{contactUsTitle}</h4>
                             <ul className="flex flex-col gap-5 text-[13px] text-slate-400">
                                 <li className="flex items-center gap-4 group cursor-default">
                                     <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500 transition-colors duration-300">
                                         <MapPin size={14} className="text-amber-500 group-hover:text-[#0B0F19] transition-colors duration-300" />
                                     </div>
-                                    <span className="leading-relaxed">193 Steele Street,<br />New York, NY 10001</span>
+                                    <span className="leading-relaxed">{address}</span>
                                 </li>
                                 <li className="flex items-center gap-4 group">
                                     <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500 transition-colors duration-300">
                                         <Mail size={14} className="text-amber-500 group-hover:text-[#0B0F19] transition-colors duration-300" />
                                     </div>
-                                    <a href="mailto:info@transelite.com" className="hover:text-amber-500 transition-colors">info@transelite.com</a>
+                                    <a href={`mailto:${email}`} className="hover:text-amber-500 transition-colors">{email}</a>
                                 </li>
                                 <li className="flex items-center gap-4 group">
                                     <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:bg-amber-500 transition-colors duration-300">
                                         <Phone size={14} className="text-amber-500 group-hover:text-[#0B0F19] transition-colors duration-300" />
                                     </div>
-                                    <a href="https://wa.me/6287788332767" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500 transition-colors">+62 877 8833 2767</a>
+                                    <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noopener noreferrer" className="hover:text-amber-500 transition-colors">{phone}</a>
                                 </li>
                             </ul>
                         </div>
 
                         {/* Subscribe To Our Newsletter */}
                         <div className="flex flex-col lg:col-span-3 lg:pl-4 xl:pl-6">
-                            <h4 className="font-bold text-white tracking-wide text-[15px] mb-6 whitespace-nowrap">Subscribe Newsletter</h4>
+                            <h4 className="font-bold text-white tracking-wide text-[15px] mb-6 whitespace-nowrap">{newsletterTitle}</h4>
                             <p className="text-[13px] text-slate-400 leading-relaxed mb-6">
-                                Stay updated with our latest news and special offers. We promise not to spam your inbox.
+                                {newsletterDesc}
                             </p>
                             <form className="relative flex items-center w-full max-w-sm">
                                 <input
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder={emailPlaceholder}
                                     className="w-full bg-white/5 text-white placeholder:text-slate-500 text-[13px] px-5 py-3.5 pr-14 rounded-full outline-none border border-white/10 focus:border-amber-500/50 transition-colors"
                                 />
                                 <button
@@ -129,8 +156,7 @@ export default function Footer() {
 
                 <div className="flex flex-col md:flex-row justify-center items-center text-[12px] text-slate-500 pt-6 md:pt-8 mt-10 md:mt-14 mb-2 border-t border-white/5 gap-4 md:gap-0 font-medium tracking-wide">
                     <p>
-                        Made With <span className="text-amber-700">❤️</span>© 2025 PT
-                        Integrasi Performa Amanah (Grasfam). All Rights Reserved.
+                        {copyright}
                     </p>
                 </div>
 

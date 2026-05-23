@@ -8,6 +8,7 @@ export default function Navbar() {
     const location = useLocation();
     const [mobileOpen, setMobileOpen] = useState(false);
     const settings = useSelector(state => state.transport.settings);
+    const contact = useSelector(state => state.transport.contact);
 
     // Brand settings from spreadsheet
     const brandName1 = settings?.brand_name_1 || 'TRANS';
@@ -18,6 +19,11 @@ export default function Navbar() {
     const brandTextColor2 = settings?.brand_text_color_2 || '#ffffff'; // white
     const brandIconBg = settings?.brand_icon_bg || '#0B0F19';          // dark
     const brandIconColor = settings?.brand_icon_color || '#f59e0b';    // amber-500
+
+    // Contact info from spreadsheet
+    const phone = contact?.phone || '+62 877 8833 2767';
+    const waNumber = contact?.wa_number || '6287788332767';
+    const address = contact?.address || '193 Steele Street, NY';
 
     // Close mobile menu on route change
     useEffect(() => {
@@ -35,11 +41,11 @@ export default function Navbar() {
     }, [mobileOpen]);
 
     const navLinks = [
-        { name: 'HOME', path: '/' },
-        { name: 'ABOUT US', path: '/about' },
-        { name: 'SERVICES', path: '/services' },
-        { name: 'FLEET', path: '/fleet' },
-        { name: 'CONTACT', path: '/contact' }
+        { name: settings?.menu_home || 'HOME', path: '/' },
+        { name: settings?.menu_about || 'ABOUT US', path: '/about' },
+        { name: settings?.menu_services || 'SERVICES', path: '/services' },
+        { name: settings?.menu_fleet || 'FLEET', path: '/fleet' },
+        { name: settings?.menu_contact || 'CONTACT', path: '/contact' }
     ];
 
     // Render logo icon - use dynamic icon from settings, fallback to Bus
@@ -142,13 +148,13 @@ export default function Navbar() {
 
                 {/* Mobile Contact Info */}
                 <div className="mt-8 px-6 flex flex-col gap-4">
-                    <a href="https://wa.me/6287788332767" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-400 hover:text-amber-500 transition-colors">
+                    <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-400 hover:text-amber-500 transition-colors">
                         <Phone size={16} className="text-amber-500" strokeWidth={2.5} />
-                        <span className="text-sm font-bold tracking-wide">+62 877 8833 2767</span>
+                        <span className="text-sm font-bold tracking-wide">{phone}</span>
                     </a>
                     <div className="flex items-center gap-3 text-slate-400">
                         <MapPin size={16} className="text-amber-500" />
-                        <span className="text-sm font-bold tracking-wide">193 Steele Street, NY</span>
+                        <span className="text-sm font-bold tracking-wide">{address}</span>
                     </div>
                 </div>
             </div>

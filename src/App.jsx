@@ -16,7 +16,32 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Initial fetch
     dispatch(fetchAllData());
+
+    // Re-fetch every 15 seconds so spreadsheet edits appear quickly
+    const interval = setInterval(() => {
+      dispatch(fetchAllData());
+    }, 2 * 1000);
+
+    // Re-fetch when user switches back to this tab (e.g. after editing spreadsheet)
+    // Debounced to avoid excessive calls on rapid tab switches
+    let visibilityTimer = null;
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        clearTimeout(visibilityTimer);
+        visibilityTimer = setTimeout(() => {
+          dispatch(fetchAllData());
+        }, 500); // 2s debounce — wait for tab to settle
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(visibilityTimer);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
   }, [dispatch]);
 
   return (
