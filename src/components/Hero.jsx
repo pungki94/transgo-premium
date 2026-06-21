@@ -33,13 +33,14 @@ const slideVariants = {
 };
 
 export default function Hero() {
-    const slides = useSelector(state => state.transport.slides);
+    const rawSlides = useSelector(state => state.transport.slides) || [];
     const homeContent = useSelector(state => state.transport.homeContent);
 
+    // Only render slides that have resolvable images
+    const slides = rawSlides.filter(s => !!resolveSlideImage(s.image));
 
     const [current, setCurrent] = useState(0);
     const [direction, setDirection] = useState(1);
-    const [isPaused, setIsPaused] = useState(false);
 
     const goToSlide = useCallback((index) => {
         setDirection(index > current ? 1 : -1);
@@ -58,14 +59,15 @@ export default function Hero() {
         setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
     }, [slides]);
 
-    // Auto-rotate every 5 seconds
+    // Auto-rotate every 5 seconds unstoppably 
     useEffect(() => {
-        if (isPaused || !slides || slides.length === 0) return;
+        if (!slides || slides.length === 0) return;
         const timer = setInterval(nextSlide, 5000);
         return () => clearInterval(timer);
-    }, [isPaused, slides, nextSlide]);
+    }, [slides, nextSlide]);
 
-    const activeSlide = slides[current];
+    // Guard current index if filtered slides drastically change length
+    const activeSlide = slides[current] || slides[0];
 
     // Hero text from spreadsheet
     const heroBadge = homeContent?.hero_badge || '';
@@ -136,8 +138,6 @@ export default function Hero() {
                 {/* Right: Slider Visual */}
                 <div
                     className="relative w-full h-[45vh] sm:h-[55vh] lg:min-h-[650px] xl:min-h-[750px] flex items-center justify-center lg:col-span-7 group/slider perspective-1000 mt-2 lg:mt-0 lg:pl-10 xl:pl-16"
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
                 >
                     {!activeSlide ? (
                         <div className="relative w-full aspect-square sm:aspect-auto lg:aspect-auto h-full lg:h-full lg:w-full max-w-[500px] lg:max-w-none mx-auto opacity-50">
