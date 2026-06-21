@@ -12,13 +12,13 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                 className="group relative aspect-[4/3] rounded-[20px] md:rounded-[28px] overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.4)] border border-white/5 cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
             >
-                <img src={img} className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:blur-sm" alt={name} />
+                <img src={img} loading="lazy" decoding="async" className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:blur-sm" alt={name} />
 
                 {/* Default overlay visible initially */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#080B13]/80 via-transparent to-transparent p-4 md:p-5 flex flex-col justify-end transition-opacity duration-500 group-hover:opacity-0">
-                    <span className="bg-amber-500 text-[#0B0F19] w-fit px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase mb-1.5 italic">{type}</span>
-                    <h3 className="text-white text-lg md:text-xl font-black uppercase italic mb-0.5 leading-tight line-clamp-2 md:line-clamp-1">{name}</h3>
-                    <p className="text-amber-500 font-bold uppercase tracking-widest text-[10px] truncate">{cap}</p>
+                    <span className="bg-amber-500 text-[#0B0F19] w-fit px-2.5 py-0.5 rounded-md text-[9px] font-black capitalize mb-1.5 italic">{type.toLowerCase()}</span>
+                    <h3 className="text-white text-lg md:text-xl font-black capitalize italic mb-0.5 leading-tight line-clamp-2 md:line-clamp-1">{name.toLowerCase()}</h3>
+                    <p className="text-amber-500 font-bold capitalize tracking-widest text-[10px] truncate">{cap.toLowerCase()}</p>
                 </div>
 
                 {/* Hover details overlay */}
@@ -26,9 +26,9 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                     <div className="absolute top-4 right-4 text-amber-500 bg-white/5 p-1.5 rounded-lg group-hover:scale-110 transition-transform hidden sm:block">
                         <Maximize2 size={16} />
                     </div>
-                    <span className="bg-amber-500 text-[#0B0F19] w-fit px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase mb-2 italic">{type}</span>
-                    <h3 className="text-white text-base md:text-xl font-black uppercase italic mb-1 line-clamp-1">{name}</h3>
-                    <p className="text-amber-500 font-bold uppercase tracking-widest text-[9px] md:text-[10px] mb-3 truncate">{cap}</p>
+                    <span className="bg-amber-500 text-[#0B0F19] w-fit px-2.5 py-0.5 rounded-md text-[9px] font-black capitalize mb-2 italic">{type.toLowerCase()}</span>
+                    <h3 className="text-white text-base md:text-xl font-black capitalize italic mb-1 line-clamp-1">{name.toLowerCase()}</h3>
+                    <p className="text-amber-500 font-bold capitalize tracking-widest text-[9px] md:text-[10px] mb-3 truncate">{cap.toLowerCase()}</p>
 
                     {features.length > 0 && (
                         <ul className="flex flex-col gap-1.5 mb-4">
@@ -44,7 +44,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                     )}
 
                     <div
-                        className="mt-auto inline-flex items-center justify-between bg-amber-500 text-[#0B0F19] px-4 py-2.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all duration-300 shrink-0"
+                        className="mt-auto inline-flex items-center justify-between bg-amber-500 text-[#0B0F19] px-4 py-2.5 rounded-xl text-[10px] md:text-xs font-black capitalize tracking-widest hover:scale-105 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all duration-300 shrink-0"
                     >
                         <span>View Details</span>
                         <ArrowRight size={14} />
@@ -81,12 +81,12 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                             </div>
 
                             <div className="w-full md:w-1/2 p-6 md:p-8 lg:p-14 overflow-y-auto custom-scrollbar">
-                                <span className="bg-amber-500/10 border border-amber-500/20 text-amber-500 w-fit px-3 py-1 rounded-md text-[10px] font-black uppercase mb-3 italic block">{type}</span>
-                                <h3 className="text-2xl lg:text-3xl font-black uppercase italic mb-1.5 tracking-tight text-white">{name}</h3>
-                                <p className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-8">{cap}</p>
+                                <span className="bg-amber-500/10 border border-amber-500/20 text-amber-500 w-fit px-3 py-1 rounded-md text-[10px] font-black capitalize mb-3 italic block">{type.toLowerCase()}</span>
+                                <h3 className="text-2xl lg:text-3xl font-black capitalize italic mb-1.5 tracking-tight text-white">{name.toLowerCase()}</h3>
+                                <p className="text-amber-500 font-bold capitalize tracking-widest text-xs mb-8">{cap.toLowerCase()}</p>
 
                                 <div className="mb-8">
-                                    <h4 className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 border border-white/10 rounded-full bg-white/5 text-white font-bold uppercase tracking-widest text-[10px]">
+                                    <h4 className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 border border-white/10 rounded-full bg-white/5 text-white font-bold capitalize tracking-widest text-[10px]">
                                         Key Features
                                     </h4>
                                     <ul className="flex flex-col gap-3">
@@ -107,13 +107,13 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         onClick={() => setIsModalOpen(false)}
-                                        className="flex-1 inline-flex items-center justify-center gap-3 bg-amber-500 text-[#0B0F19] px-5 py-4 rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform"
+                                        className="flex-1 inline-flex items-center justify-center gap-3 bg-amber-500 text-[#0B0F19] px-5 py-4 rounded-xl text-xs font-black capitalize tracking-widest hover:scale-105 transition-transform"
                                     >
                                         Book Fleet <ArrowRight size={16} />
                                     </a>
                                     <button
                                         onClick={() => setIsModalOpen(false)}
-                                        className="flex-none inline-flex items-center justify-center px-6 py-4 rounded-xl font-bold uppercase tracking-widest text-xs text-slate-400 hover:text-white hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
+                                        className="flex-none inline-flex items-center justify-center px-6 py-4 rounded-xl font-bold capitalize tracking-widest text-xs text-slate-400 hover:text-white hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
                                     >
                                         Close
                                     </button>

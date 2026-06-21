@@ -8,22 +8,49 @@ const imageAliases = {
     'hiace-premio.jpg': 'hiace-premio.png',
 };
 
+// Eagerly resolve all fleet and hero assets into a dictionary map at build/dev time
+const fleetImages = import.meta.glob('../assets/fleets/*.{jpg,jpeg,png,svg,webp}', { eager: true, import: 'default' });
+const heroImages = import.meta.glob('../assets/hero/*.{jpg,jpeg,png,svg,webp}', { eager: true, import: 'default' });
+
+const parseGoogleDriveUrl = (url) => {
+    if (!url || !url.includes('drive.google.com')) return null;
+    let fileId = '';
+    try {
+        const urlObj = new URL(url);
+        fileId = urlObj.searchParams.get('id');
+        if (!fileId && url.includes('/d/')) {
+            fileId = url.split('/d/')[1].split('/')[0];
+        }
+    } catch (e) { }
+
+    if (fileId) {
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+    }
+    return null;
+};
+
 export const resolveImage = (imgName) => {
     if (!imgName) return '';
+
+    const driveUrl = parseGoogleDriveUrl(imgName);
+    if (driveUrl) return driveUrl;
+
     if (imgName.startsWith('http')) return imgName;
-    // Apply alias mapping for legacy/incorrect filenames
+
     const resolved = imageAliases[imgName] || imgName;
-    // Dynamically resolve the image path using Vite's URL feature.
-    // This eliminates the need for any hardcoded imports.
-    try {
-        return new URL(`../assets/fleets/${resolved}`, import.meta.url).href;
-    } catch {
-        return '';
-    }
+    const match = Object.keys(fleetImages).find(path => path.endsWith(resolved));
+    return match ? fleetImages[match] : '';
 };
 
 export const resolveSlideImage = (imgName) => {
     if (!imgName) return '';
+
+    const driveUrl = parseGoogleDriveUrl(imgName);
+    if (driveUrl) return driveUrl;
+
     if (imgName.startsWith('http')) return imgName;
-    return new URL(`../assets/hero/${imgName}`, import.meta.url).href;
+    if (imgName.startsWith('/')) return imgName;
+
+    const match = Object.keys(heroImages).find(path => path.endsWith(imgName));
+    return match ? heroImages[match] : '';
 };

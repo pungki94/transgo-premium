@@ -4,44 +4,53 @@ import { useSelector } from 'react-redux';
 import { renderIcon } from '../utils/icons';
 
 export default function Footer() {
-    const settings = useSelector(state => state.transport.settings);
-    const contact = useSelector(state => state.transport.contact);
+    const { settings, menu, contact, dynamicPages } = useSelector(state => state.transport);
 
     // Brand settings from spreadsheet (same as Navbar)
-    const brandName1 = settings?.brand_name_1 || 'TRANS';
-    const brandName2 = settings?.brand_name_2 || 'ELITE';
-    const brandIcon = settings?.brand_icon || 'Bus';
-    const brandBgColor = settings?.brand_bg_color || '#f59e0b';
-    const brandTextColor1 = settings?.brand_text_color_1 || '#0B0F19';
-    const brandTextColor2 = settings?.brand_text_color_2 || '#ffffff';
-    const brandIconBg = settings?.brand_icon_bg || '#0B0F19';
-    const brandIconColor = settings?.brand_icon_color || '#f59e0b';
+    const brandName1 = settings?.brand_name_1 || '';
+    const brandName2 = settings?.brand_name_2 || '';
+    const brandIcon = settings?.brand_icon || '';
+    const brandBgColor = settings?.brand_bg_color || '';
+    const brandTextColor1 = settings?.brand_text_color_1 || '';
+    const brandTextColor2 = settings?.brand_text_color_2 || '';
+    const brandIconBg = settings?.brand_icon_bg || '';
+    const brandIconColor = settings?.brand_icon_color || '';
 
     // Contact info from spreadsheet
-    const address = contact?.address || '193 Steele Street, New York, NY 10001';
-    const email = contact?.email || 'info@transelite.com';
-    const phone = contact?.phone || '+62 877 8203 0286';
-    const waNumber = contact?.wa_number || '6287782030286';
-    const footerDesc = contact?.footer_desc || 'Providing top-tier transport and logistics solutions. Your reliable partner in moving your business forward with confidence.';
-    const copyright = contact?.copyright || 'Made With ❤️© 2025 PT Integrasi Performa Amanah (Grasfam). All Rights Reserved.';
+    const address = contact?.address || '';
+    const email = contact?.email || '';
+    const phone = contact?.phone || '';
+    const waNumber = phone ? phone.replace(/\D/g, '').replace(/^0/, '62') : '';
+    const footerDesc = contact?.footer_desc || '';
+    const copyright = contact?.copyright || '';
 
-    // Social media links from spreadsheet
-    const fbLink = contact?.facebook || '#';
-    const igLink = contact?.instagram || '#';
-    const twLink = contact?.twitter || '#';
-    const liLink = contact?.linkedin || '#';
+    // Social media links
+    const fbLink = contact?.facebook || '';
+    const igLink = contact?.instagram || '';
+    const twLink = contact?.twitter || '';
+    const liLink = contact?.linkedin || '';
 
     // Footer labels from spreadsheet
-    const quickLinksTitle = contact?.quick_links_title || 'Quick Links';
-    const contactUsTitle = contact?.contact_us_title || 'Contact Us';
-    const newsletterTitle = contact?.newsletter_title || 'Subscribe Newsletter';
-    const newsletterDesc = contact?.newsletter_desc || 'Stay updated with our latest news and special offers. We promise not to spam your inbox.';
-    const emailPlaceholder = contact?.email_placeholder || 'Enter your email';
-    const menuHome = settings?.menu_home || 'Home';
-    const menuAbout = settings?.menu_about || 'About Us';
-    const menuServices = settings?.menu_services || 'Services';
-    const menuFleet = settings?.menu_fleet || 'Our Fleet';
-    const menuContact = settings?.menu_contact || 'Contact';
+    const quickLinksTitle = contact?.quick_links_title || '';
+    const contactUsTitle = contact?.contact_us_title || '';
+    const newsletterTitle = contact?.newsletter_title || '';
+    const newsletterDesc = contact?.newsletter_desc || '';
+    const emailPlaceholder = contact?.email_placeholder || '';
+
+    // Dynamically build nav links from Menu sheet, fallback to default if empty
+    // Automatically include any sheets detected as dynamic pages
+    const baseLinks = menu && menu.length > 0
+        ? menu
+        : [
+            { name: settings?.menu_home || 'HOME', path: '/' },
+            { name: settings?.menu_about || 'ABOUT US', path: '/about' },
+            { name: settings?.menu_services || 'SERVICES', path: '/services' },
+            { name: settings?.menu_fleet || 'FLEET', path: '/fleet' },
+            { name: settings?.menu_contact || 'CONTACT', path: '/contact' },
+            { name: settings?.menu_gallery || 'GALLERY', path: '/gallery' }
+        ];
+
+    const navLinks = [...baseLinks, ...dynamicPages];
 
     // Render logo icon dynamically
     const LogoIcon = () => {
@@ -66,7 +75,7 @@ export default function Footer() {
                             <div className="p-1 lg:p-1.5 rounded-lg shrink-0" style={{ backgroundColor: brandIconBg, color: brandIconColor }}>
                                 <LogoIcon />
                             </div>
-                            <span className="text-lg md:text-xl lg:text-2xl tracking-wide uppercase leading-none" style={{ color: brandTextColor1 }}>
+                            <span className="text-lg md:text-xl lg:text-2xl tracking-wide capitalize leading-none" style={{ color: brandTextColor1 }}>
                                 {brandName1}<span style={{ color: brandTextColor2 }}>{brandName2}</span>
                             </span>
                         </div>
@@ -97,11 +106,13 @@ export default function Footer() {
                         <div className="flex flex-col lg:col-span-2">
                             <h4 className="font-bold text-white tracking-wide text-[15px] mb-6">{quickLinksTitle}</h4>
                             <ul className="flex flex-col gap-3.5 text-[13px] text-slate-400">
-                                <li><Link to="/" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuHome}</Link></li>
-                                <li><Link to="/about" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuAbout}</Link></li>
-                                <li><Link to="/services" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuServices}</Link></li>
-                                <li><Link to="/fleet" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuFleet}</Link></li>
-                                <li><Link to="/contact" className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">{menuContact}</Link></li>
+                                {navLinks.map((link) => (
+                                    <li key={link.name}>
+                                        <Link to={link.path} className="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300 capitalize">
+                                            {link.name.toLowerCase()}
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
 

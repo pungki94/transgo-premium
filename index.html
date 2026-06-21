@@ -1,13 +1,73 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>transgo-premium</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>transgo-premium</title>
+
+  <!-- Preconnect to Backend API to warm up DNS & TCP connections -->
+  <link rel="preconnect" href="http://localhost:5000" crossorigin />
+
+  <!-- Preload LCP Hero Image -->
+  <link rel="preload" as="image" href="/bus-fleet.jpg" fetchpriority="high" />
+
+  <!-- Preconnect and Load Google Fonts with swap to prevent text block (FOIT/FOUT issues) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" />
+  </noscript>
+
+  <!-- Critical CSS for faster FCP/LCP & Skeleton Loader -->
+  <style>
+    body {
+      margin: 0;
+      background-color: #0B0F19;
+      color: #ffffff;
+    }
+
+    #root:empty {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #0B0F19;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #root:empty::before {
+      content: '';
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-left-color: #f59e0b;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

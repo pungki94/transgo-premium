@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 
 export default function WhatsAppFAB() {
     const contact = useSelector(state => state.transport.contact);
-    const waNumber = contact?.wa_number || '6287782030286';
-    const waTooltip = contact?.wa_tooltip || 'Chat With Us';
+    const waNumber = contact?.wa_number || '';
+    const waTooltip = contact?.wa_tooltip || '';
 
     return (
         <a

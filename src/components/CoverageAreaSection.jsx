@@ -13,7 +13,7 @@ export default function CoverageAreaSection() {
                     <div className="w-20 h-20 mx-auto bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 mb-6">
                         <Globe size={40} />
                     </div>
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase text-white tracking-tighter mb-4 md:mb-6">{coverageContent.title || 'Nationwide'} <span className="text-amber-500">{coverageContent.highlight || 'Coverage'}</span></h2>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic capitalize text-white tracking-tighter mb-4 md:mb-6">{coverageContent.title?.toLowerCase() || 'Nationwide'} <span className="text-amber-500">{coverageContent.highlight?.toLowerCase() || 'Coverage'}</span></h2>
                     <p className="text-slate-400 text-lg max-w-2xl mx-auto">
                         {coverageContent.desc || ''}
                     </p>
@@ -23,7 +23,7 @@ export default function CoverageAreaSection() {
                         const areaName = typeof item === 'string' ? item : (item.area || '');
                         return (
                             <div key={idx} className="p-4 md:p-6 h-full min-h-[120px] flex flex-col items-center justify-center bg-white/5 border border-white/10 rounded-[16px] md:rounded-[24px] hover:bg-amber-500 hover:text-[#0B0F19] hover:border-amber-500 transition-colors group">
-                                <span className="text-white group-hover:text-[#0B0F19] font-bold uppercase tracking-wide m-0 leading-tight my-auto">{areaName}</span>
+                                <span className="text-white group-hover:text-[#0B0F19] font-bold capitalize tracking-wide m-0 leading-tight my-auto">{areaName.toLowerCase()}</span>
                             </div>
                         );
                     })}

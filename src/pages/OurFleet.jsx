@@ -30,7 +30,7 @@ export default function OurFleet() {
     const { fleets, activeFilter, fleetPageContent: fp, settings } = useSelector(state => state.transport);
 
     // Build unique categories dynamically from fleet data
-    const allLabel = settings?.filter_all || 'All';
+    const allLabel = (settings?.filter_all || 'All');
     const dynamicCategories = [...new Set(fleets.map(f => f.category).filter(Boolean))];
     const categories = [allLabel, ...dynamicCategories];
 
@@ -38,20 +38,20 @@ export default function OurFleet() {
     const filteredFleets = activeFilter === allLabel ? fleets : fleets.filter(f => f.category === activeFilter);
 
     // Fleet page text from spreadsheet
-    const pageBadge = fp?.page_badge || 'Our Vehicles';
-    const pageTitle = fp?.page_title || 'Premium';
-    const pageHighlight = fp?.page_highlight || 'Fleet';
-    const pageDesc = fp?.page_desc || 'Eksplorasi armada premium kami yang dirancang khusus untuk kenyamanan eksekutif dan efisiensi logistik kelas berat.';
-    const useCasesTitle = fp?.usecases_title || 'Ideal';
-    const useCasesHighlight = fp?.usecases_highlight || 'Use Cases';
-    const useCasesDesc = fp?.usecases_desc || 'Berbagai skenario perjalanan dan pengiriman yang cocok menggunakan armada kami.';
-    const useCase1Title = fp?.usecase_1_title || 'Corporate Events';
-    const useCase1Desc = fp?.usecase_1_desc || 'Sempurna untuk Rakernas, Outing Perusahaan, atau Study Tour Eksekutif dengan fasilitas VVIP.';
-    const useCase2Title = fp?.usecase_2_title || 'Airport Transfer';
-    const useCase2Desc = fp?.usecase_2_desc || 'Mobilitas cepat dari dan ke bandara internasional dengan armada Hiace Premio.';
-    const useCase3Title = fp?.usecase_3_title || 'Industrial Logistics';
-    const useCase3Desc = fp?.usecase_3_desc || 'Angkutan kargo logistik skala besar dengan Wingbox Tronton dan Blind Van.';
-    const emptyText = fp?.empty_text || 'Armada tidak ditemukan untuk kategori ini.';
+    const pageBadge = fp?.page_badge || '';
+    const pageTitle = fp?.page_title || '';
+    const pageHighlight = fp?.page_highlight || '';
+    const pageDesc = fp?.page_desc || '';
+    const useCasesTitle = fp?.usecases_title || '';
+    const useCasesHighlight = fp?.usecases_highlight || '';
+    const useCasesDesc = fp?.usecases_desc || '';
+    const useCase1Title = fp?.usecase_1_title || '';
+    const useCase1Desc = fp?.usecase_1_desc || '';
+    const useCase2Title = fp?.usecase_2_title || '';
+    const useCase2Desc = fp?.usecase_2_desc || '';
+    const useCase3Title = fp?.usecase_3_title || '';
+    const useCase3Desc = fp?.usecase_3_desc || '';
+    const emptyText = fp?.empty_text || '';
 
     return (
         <div className="bg-[#0B0F19] min-h-screen font-sans pt-[60px] md:pt-[75px]">
@@ -60,15 +60,15 @@ export default function OurFleet() {
                 <div className="max-w-[85rem] mx-auto px-6 lg:px-12 relative z-10">
                     <div className="text-center mb-6 md:mb-8">
                         <div className="inline-flex items-center gap-2 mb-3 px-4 py-1.5 border border-amber-500/30 rounded-full bg-amber-500/10">
-                            <span className="text-amber-500 font-bold tracking-[0.2em] uppercase text-xs">{pageBadge}</span>
+                            <span className="text-amber-500 font-bold tracking-[0.2em] capitalize text-xs">{pageBadge.toLowerCase()}</span>
                         </div>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase text-white tracking-tighter">{pageTitle} <span className="text-amber-500">{pageHighlight}</span></h1>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black italic capitalize text-white tracking-tighter">{pageTitle.toLowerCase()} <span className="text-amber-500">{pageHighlight.toLowerCase()}</span></h1>
                         <p className="text-slate-400 text-base mt-3 max-w-2xl mx-auto">{pageDesc}</p>
                     </div>
                     <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8">
                         {categories.map((cat) => (
                             <button key={cat} onClick={() => dispatch(setFilter(cat))}
-                                className={`px-5 md:px-8 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 border ${activeFilter === cat ? 'bg-amber-500 text-[#0B0F19] border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-105' : 'bg-white/5 text-slate-400 border-white/10 hover:border-amber-500/50 hover:text-amber-500'}`}>{cat}</button>
+                                className={`px-5 md:px-8 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-black text-[10px] capitalize tracking-widest transition-all duration-300 border ${activeFilter === cat ? 'bg-amber-500 text-[#0B0F19] border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-105' : 'bg-white/5 text-slate-400 border-white/10 hover:border-amber-500/50 hover:text-amber-500'}`}>{cat.toLowerCase()}</button>
                         ))}
                     </div>
                     <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -90,7 +90,7 @@ export default function OurFleet() {
             <section className="py-16 md:py-24 relative overflow-hidden bg-[#080B13] border-b border-white/5">
                 <div className="max-w-[85rem] mx-auto px-6 lg:px-12">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase text-white tracking-tighter mb-4">{useCasesTitle} <span className="text-amber-500">{useCasesHighlight}</span></h2>
+                        <h2 className="text-3xl sm:text-4xl md:text-5_xl font-black italic capitalize text-white tracking-tighter mb-4">{useCasesTitle.toLowerCase()} <span className="text-amber-500">{useCasesHighlight.toLowerCase()}</span></h2>
                         <p className="text-slate-400 max-w-2xl mx-auto">{useCasesDesc}</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -103,7 +103,7 @@ export default function OurFleet() {
                             return (
                                 <div key={i} className="p-6 md:p-10 bg-white/5 border border-white/10 rounded-[24px] md:rounded-[40px] hover:border-amber-500/50 transition-colors group">
                                     <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 mb-8 group-hover:bg-amber-500 group-hover:text-[#0B0F19] transition-colors"><Icon size={32} /></div>
-                                    <h3 className="text-2xl font-black italic text-white uppercase tracking-tight mb-4">{uc.title}</h3>
+                                    <h3 className="text-2xl font-black italic text-white capitalize tracking-tight mb-4">{uc.title.toLowerCase()}</h3>
                                     <p className="text-slate-400 text-sm leading-relaxed">{uc.desc}</p>
                                 </div>
                             );

@@ -10,10 +10,10 @@ export default function StepsSection() {
         <section className="py-16 md:py-24 bg-[#080B13] border-y border-white/5 relative z-10">
             <div className="max-w-[85rem] mx-auto px-6 lg:px-12 text-center">
                 <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 border border-amber-500/30 rounded-full bg-amber-500/10">
-                    <span className="text-amber-500 font-bold tracking-[0.2em] uppercase text-xs">{stepsContent.badge || 'Simple Process'}</span>
+                    <span className="text-amber-500 font-bold tracking-[0.2em] capitalize text-xs">{(stepsContent.badge || 'Simple Process').toLowerCase()}</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase text-white tracking-tighter mb-10 md:mb-16">
-                    {stepsContent.title || 'How It'} <span className="text-amber-500">{stepsContent.highlight || 'Works'}</span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic capitalize text-white tracking-tighter mb-10 md:mb-16">
+                    {(stepsContent.title || 'How It').toLowerCase()} <span className="text-amber-500">{(stepsContent.highlight || 'Works').toLowerCase()}</span>
                 </h2>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 relative">
