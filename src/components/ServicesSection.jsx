@@ -5,7 +5,12 @@ import ServiceCard from './ServiceCard';
 export default function ServicesSection({ isHero = false }) {
     const services = useSelector(state => state.transport.services);
     const servicesContent = useSelector(state => state.transport.servicesContent);
-
+    console.log(
+        services.map(s => ({
+            title: s.title,
+            icon: s.icon
+        }))
+    );
     return (
         <section className={`py-16 md:py-24 relative z-10 ${isHero ? 'lg:py-32 border-b border-white/5' : ''}`} id={isHero ? "services-hero" : ""}>
             {isHero && <div className="absolute top-0 left-1/4 w-[40rem] h-[40rem] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />}

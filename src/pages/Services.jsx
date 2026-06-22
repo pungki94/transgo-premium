@@ -26,7 +26,7 @@ export default function Services() {
             <section className="py-16 md:py-24 relative overflow-hidden bg-[#080B13]">
                 <div className="max-w-[85rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-16">
                     <div className="w-full lg:w-1/2">
-                        <h2 className="text-3xl sm:text-4xl lg:text-5_xl font-black italic capitalize text-white tracking-tighter mb-6 md:mb-8">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black italic capitalize text-white tracking-tighter mb-6 md:mb-8">
                             {ecoTitle1.toLowerCase()} <br />
                             <span className="text-amber-500">{ecoTitle2.toLowerCase()}</span>
                         </h2>

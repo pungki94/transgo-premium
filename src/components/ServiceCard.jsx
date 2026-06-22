@@ -1,6 +1,6 @@
-import { Bus, Truck, Car, Package, Globe } from 'lucide-react';
+import { Bus, Truck, Car, Package, Globe, Briefcase, Users, PlaneTakeoff } from 'lucide-react';
 
-const iconMap = { Bus: <Bus />, Truck: <Truck />, Car: <Car />, Package: <Package />, Globe: <Globe /> };
+const iconMap = { Bus: <Bus />, Truck: <Truck />, Car: <Car />, Package: <Package />, Globe: <Globe />, Briefcase: <Briefcase />, Users: <Users />, PlaneTakeoff: <PlaneTakeoff /> };
 
 export default function ServiceCard({ title, desc, icon }) {
     return (
