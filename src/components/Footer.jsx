@@ -10,11 +10,12 @@ export default function Footer() {
     const brandName1 = settings?.brand_name_1 || '';
     const brandName2 = settings?.brand_name_2 || '';
     const brandIcon = settings?.brand_icon || '';
-    const brandBgColor = settings?.brand_bg_color || '';
-    const brandTextColor1 = settings?.brand_text_color_1 || '';
-    const brandTextColor2 = settings?.brand_text_color_2 || '';
-    const brandIconBg = settings?.brand_icon_bg || '';
-    const brandIconColor = settings?.brand_icon_color || '';
+    const fixColor = (c) => (c || '').replace('##', '#');
+    const brandBgColor = fixColor(settings?.brand_bg_color);
+    const brandTextColor1 = fixColor(settings?.brand_text_color_1);
+    const brandTextColor2 = fixColor(settings?.brand_text_color_2);
+    const brandIconBg = fixColor(settings?.brand_icon_bg);
+    const brandIconColor = fixColor(settings?.brand_icon_color);
 
     // Contact info from spreadsheet
     const address = contact?.address || '';

@@ -19,11 +19,12 @@ export default function Navbar({ isAuthenticated: propAuthenticated = false, onL
     const brandName1 = settings?.brand_name_1 || '';
     const brandName2 = settings?.brand_name_2 || '';
     const brandIcon = settings?.brand_icon || '';
-    const brandBgColor = settings?.brand_bg_color || '';       // amber-500
-    const brandTextColor1 = settings?.brand_text_color_1 || ''; // dark
-    const brandTextColor2 = settings?.brand_text_color_2 || ''; // white
-    const brandIconBg = settings?.brand_icon_bg || '';          // dark
-    const brandIconColor = settings?.brand_icon_color || '';    // amber-500
+    const fixColor = (c) => (c || '').replace('##', '#');
+    const brandBgColor = fixColor(settings?.brand_bg_color);
+    const brandTextColor1 = fixColor(settings?.brand_text_color_1);
+    const brandTextColor2 = fixColor(settings?.brand_text_color_2);
+    const brandIconBg = fixColor(settings?.brand_icon_bg);
+    const brandIconColor = fixColor(settings?.brand_icon_color);
 
     // Contact info from spreadsheet
     const phone = contact?.phone || '';
