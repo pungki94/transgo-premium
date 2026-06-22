@@ -5,6 +5,7 @@ import { renderIcon } from '../utils/icons';
 
 export default function Footer() {
     const { settings, menu, contact, dynamicPages } = useSelector(state => state.transport);
+    const { isAuthenticated } = useSelector(state => state.auth || {});
 
     // Brand settings from spreadsheet (same as Navbar)
     const brandName1 = settings?.brand_name_1 || '';
@@ -51,7 +52,7 @@ export default function Footer() {
             { name: settings?.menu_gallery || 'GALLERY', path: '/gallery' }
         ];
 
-    const navLinks = [...baseLinks, ...dynamicPages];
+    const navLinks = [...baseLinks, ...(isAuthenticated ? (dynamicPages || []) : [])];
 
     // Render logo icon dynamically
     const LogoIcon = () => {

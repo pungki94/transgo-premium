@@ -57,7 +57,7 @@ export default function Navbar({ isAuthenticated: propAuthenticated = false, onL
     ];
 
     // dynamicPages are auto-detected from spreadsheet metadata (any non-core sheet)
-    const navLinks = [...coreLinks, ...(dynamicPages || [])];
+    const navLinks = [...coreLinks, ...(isAuthenticated ? (dynamicPages || []) : [])];
 
     // Render logo icon - use dynamic icon from settings, fallback to Bus
     const LogoIcon = () => {
