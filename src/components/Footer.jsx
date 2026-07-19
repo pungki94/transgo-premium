@@ -77,7 +77,7 @@ export default function Footer() {
                             <div className="p-1 lg:p-1.5 rounded-lg shrink-0" style={{ backgroundColor: brandIconBg, color: brandIconColor }}>
                                 <LogoIcon />
                             </div>
-                            <span className="text-lg md:text-xl lg:text-2xl tracking-wide capitalize leading-none" style={{ color: brandTextColor1 }}>
+                            <span className="text-lg md:text-xl lg:text-2xl tracking-wide lowercase leading-none" style={{ color: brandTextColor1 }}>
                                 {brandName1}<span style={{ color: brandTextColor2 }}>{brandName2}</span>
                             </span>
                         </div>

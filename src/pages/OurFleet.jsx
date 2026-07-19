@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setFilter } from '../store';
+import { setFilter, fetchAllData } from '../store';
 import FleetCard from '../components/FleetCard';
 import { resolveImage } from '../utils/assets';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
+import { Plus, X, Image as ImageIcon } from 'lucide-react';
 
 // Icon lookup map — allows spreadsheet to specify icon by name
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const iconMap = {
     Briefcase: LucideIcons.Briefcase,
     PlaneTakeoff: LucideIcons.PlaneTakeoff,
@@ -28,6 +31,126 @@ const getIcon = (name, fallback) => iconMap[name] || fallback;
 export default function OurFleet() {
     const dispatch = useDispatch();
     const { fleets, activeFilter, fleetPageContent: fp, settings } = useSelector(state => state.transport);
+    const isAuthenticated = localStorage.getItem('isAuth') === 'true';
+
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [uploadPreview, setUploadPreview] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [editingId, setEditingId] = useState(null);
+    const [newFleet, setNewFleet] = useState({
+        name: '', cap: '', type: '', category: '', features: ''
+    });
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+        if (file.size > 5 * 1024 * 1024) { alert('Maximum file size is 5MB.'); return; }
+        setImageFile(file);
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 1000;
+                let width = img.width, height = img.height;
+                if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                canvas.width = width; canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                setUploadPreview(canvas.toDataURL('image/jpeg', 0.7));
+            };
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const closeModal = () => {
+        setIsAddModalOpen(false);
+        setUploadPreview(null);
+        setImageFile(null);
+        setEditingId(null);
+        setNewFleet({ name: '', cap: '', type: '', category: '', features: '' });
+    };
+
+    const handleEditClick = (e, item) => {
+        e.stopPropagation();
+        setEditingId(item.id);
+        setNewFleet({
+            name: item.name || '',
+            cap: item.cap || '',
+            type: item.type || '',
+            category: item.category || '',
+            features: item.features || ''
+        });
+        setUploadPreview(item.image ? resolveImage(item.image) : null);
+        setImageFile(null);
+        setIsAddModalOpen(true);
+    };
+
+    const handleDeleteClick = async (e, id) => {
+        e.stopPropagation();
+        if (!window.confirm("Are you sure you want to delete this fleet?")) return;
+
+        try {
+            const res = await fetch(`${API_URL}/fleet/delete`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+
+            const data = await res.json();
+            if (data.status === 'success') {
+                alert('Success: ' + data.message);
+                dispatch(fetchAllData());
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (error) {
+            alert('System error occurred: ' + error.message);
+        }
+    };
+
+    const handleSubmitFleet = async () => {
+        if (!editingId && (!uploadPreview || !newFleet.name || !newFleet.category)) {
+            alert('Name, category, and image are required.');
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            let base64Data = null;
+            let mimeType = null;
+            if (uploadPreview && uploadPreview.startsWith('data:')) {
+                const parts = uploadPreview.split(',');
+                base64Data = parts[1];
+                mimeType = parts[0].match(/:(.*?);/)[1];
+            }
+
+            const endpoint = editingId ? `${API_URL}/fleet/update` : `${API_URL}/fleet/add`;
+
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: editingId,
+                    fileBase64: base64Data,
+                    mimeType: mimeType,
+                    fileName: imageFile ? imageFile.name : null,
+                    ...newFleet
+                })
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                dispatch(fetchAllData());
+                closeModal();
+            } else {
+                throw new Error(data.error);
+            }
+        } catch (err) {
+            alert('Error: ' + err.message);
+            setIsSubmitting(false);
+        }
+    };
 
     // Build unique categories dynamically from fleet data
     const allLabel = (settings?.filter_all || 'All');
@@ -65,25 +188,36 @@ export default function OurFleet() {
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black italic capitalize text-white tracking-tighter">{pageTitle.toLowerCase()} <span className="text-amber-500">{pageHighlight.toLowerCase()}</span></h1>
                         <p className="text-slate-400 text-base mt-3 max-w-2xl mx-auto">{pageDesc}</p>
                     </div>
-                    <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8">
+                    <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3 mb-6 md:mb-8">
                         {categories.map((cat) => (
                             <button key={cat} onClick={() => dispatch(setFilter(cat))}
                                 className={`px-5 md:px-8 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-black text-[10px] capitalize tracking-widest transition-all duration-300 border ${activeFilter === cat ? 'bg-amber-500 text-[#0B0F19] border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-105' : 'bg-white/5 text-slate-400 border-white/10 hover:border-amber-500/50 hover:text-amber-500'}`}>{cat.toLowerCase()}</button>
                         ))}
                     </div>
+                    {isAuthenticated && (
+                        <div className="flex justify-start mb-6">
+                            <button
+                                onClick={() => setIsAddModalOpen(true)}
+                                className="w-12 h-12 bg-[#b25712] rounded-lg flex items-center justify-center hover:bg-[#9a4a0f] transition-colors shadow-lg"
+                                title="Add New Fleet"
+                            >
+                                <Plus size={24} className="text-white" />
+                            </button>
+                        </div>
+                    )}
                     <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         <AnimatePresence mode='popLayout'>
-                            {filteredFleets.map((f) => {
+                            {filteredFleets.filter(f => f.name).map((f) => {
                                 const featuresArr = typeof f.features === 'string' ? f.features.split(',').map(s => s.trim()).filter(Boolean) : (f.features || []);
                                 return (
                                     <motion.div key={f.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}>
-                                        <FleetCard {...f} features={featuresArr} img={resolveImage(f.image)} />
+                                        <FleetCard {...f} f={f} features={featuresArr} img={resolveImage(f.image)} isAuthenticated={isAuthenticated} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
                                     </motion.div>
                                 );
                             })}
                         </AnimatePresence>
                     </motion.div>
-                    {filteredFleets.length === 0 && (<div className="text-center py-20 text-slate-400 italic">{emptyText}</div>)}
+                    {filteredFleets.filter(f => f.name).length === 0 && (<div className="text-center py-20 text-slate-400 italic">{emptyText}</div>)}
                 </div>
             </section>
 
@@ -112,6 +246,75 @@ export default function OurFleet() {
                 </div>
             </section>
 
+            {/* Add Fleet Modal */}
+            {isAddModalOpen && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-4 animate-fadeIn">
+                    <div className="bg-white rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-4xl max-h-[95vh] flex flex-col relative overflow-hidden" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0 bg-gray-50/50">
+                            <h2 className="text-[#1a202c] text-xl font-black italic tracking-tight">{editingId ? 'Edit' : 'Add New'} <span className="text-amber-500">Fleet</span></h2>
+                            <button onClick={closeModal} className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-600 transition-colors">
+                                <X size={18} />
+                            </button>
+                        </div>
+
+                        <div className="flex flex-col md:flex-row gap-8 p-6 lg:p-8 overflow-y-auto">
+                            {/* Image Upload */}
+                            <div className="w-full md:w-5/12 flex flex-col gap-2 shrink-0">
+                                <label className="w-full aspect-[4/3] border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 hover:border-amber-500 transition-all relative overflow-hidden group">
+                                    <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                                    {uploadPreview ? (
+                                        <div className="w-full h-full relative p-2"><img src={uploadPreview} alt="Preview" className="w-full h-full object-cover rounded-xl shadow-sm" /></div>
+                                    ) : (
+                                        <>
+                                            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3 pointer-events-none group-hover:scale-110 transition-transform">
+                                                <ImageIcon size={24} className="text-gray-400 group-hover:text-amber-500 transition-colors" />
+                                            </div>
+                                            <p className="text-gray-700 font-bold text-sm pointer-events-none">Select Fleet Photo</p>
+                                            <p className="text-gray-400 text-xs mt-1">(Max 5MB)</p>
+                                        </>
+                                    )}
+                                </label>
+                            </div>
+
+                            {/* Form Fields */}
+                            <div className="w-full md:w-7/12 flex flex-col gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 pl-1">Fleet Name *</label>
+                                    <input type="text" placeholder="e.g. Volvo 9900 VIP" value={newFleet.name} onChange={e => setNewFleet(p => ({ ...p, name: e.target.value }))} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1a202c] focus:outline-none focus:border-amber-500 focus:bg-white transition-colors" />
+                                </div>
+                                <div className="flex gap-4">
+                                    <div className="w-1/2">
+                                        <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 pl-1">Category *</label>
+                                        <input type="text" list="fleet-categories" placeholder="e.g. Bus" value={newFleet.category} onChange={e => setNewFleet(p => ({ ...p, category: e.target.value }))} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1a202c] focus:outline-none focus:border-amber-500 focus:bg-white transition-colors" />
+                                        <datalist id="fleet-categories">
+                                            {dynamicCategories.map(cat => (
+                                                <option key={cat} value={cat} />
+                                            ))}
+                                        </datalist>
+                                    </div>
+                                    <div className="w-1/2">
+                                        <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 pl-1">Type</label>
+                                        <input type="text" placeholder="e.g. Executive Class" value={newFleet.type} onChange={e => setNewFleet(p => ({ ...p, type: e.target.value }))} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1a202c] focus:outline-none focus:border-amber-500 focus:bg-white transition-colors" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 pl-1">Capacity</label>
+                                    <input type="text" placeholder="e.g. 40 Seats" value={newFleet.cap} onChange={e => setNewFleet(p => ({ ...p, cap: e.target.value }))} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1a202c] focus:outline-none focus:border-amber-500 focus:bg-white transition-colors" />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 pl-1">Key Features</label>
+                                    <textarea placeholder="Comma separated (e.g. Reclining Seats, WiFi, Toilet)" rows="2" value={newFleet.features} onChange={e => setNewFleet(p => ({ ...p, features: e.target.value }))} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1a202c] focus:outline-none focus:border-amber-500 focus:bg-white transition-colors resize-none"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50 shrink-0">
+                            <button onClick={closeModal} className="px-6 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-100 transition-colors">Cancel</button>
+                            <button onClick={handleSubmitFleet} disabled={isSubmitting} className={`px-6 py-2.5 rounded-xl text-white text-sm font-bold shadow-md transition-all ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600 hover:shadow-amber-500/30 hover:scale-105'}`}>{isSubmitting ? 'Uploading...' : 'Save Fleet'}</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

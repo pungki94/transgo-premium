@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Clock, Award } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Clock, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { resolveSlideImage } from '../utils/assets';
@@ -58,6 +58,49 @@ export default function Hero() {
         setDirection(-1);
         setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
     }, [slides]);
+
+    // Drag-to-slide state
+    const isDragging = useRef(false);
+    const dragStartX = useRef(0);
+    const hasDragged = useRef(false);
+
+    const handleDragStart = useCallback((clientX) => {
+        isDragging.current = true;
+        dragStartX.current = clientX;
+        hasDragged.current = false;
+    }, []);
+
+    const handleDragEnd = useCallback((clientX) => {
+        if (!isDragging.current) return;
+        isDragging.current = false;
+        const diff = dragStartX.current - clientX;
+        if (Math.abs(diff) > 50) {
+            hasDragged.current = true;
+            if (diff > 0) nextSlide();
+            else prevSlide();
+        }
+    }, [nextSlide, prevSlide]);
+
+    const onMouseDown = useCallback((e) => {
+        e.preventDefault();
+        handleDragStart(e.clientX);
+    }, [handleDragStart]);
+
+    const onMouseUp = useCallback((e) => {
+        handleDragEnd(e.clientX);
+    }, [handleDragEnd]);
+
+    const onMouseLeave = useCallback((e) => {
+        if (isDragging.current) handleDragEnd(e.clientX);
+    }, [handleDragEnd]);
+
+    const onTouchStart = useCallback((e) => {
+        handleDragStart(e.touches[0].clientX);
+    }, [handleDragStart]);
+
+    const onTouchEnd = useCallback((e) => {
+        handleDragEnd(e.changedTouches[0].clientX);
+    }, [handleDragEnd]);
 
     // Auto-rotate every 5 seconds unstoppably 
     useEffect(() => {
@@ -156,7 +199,14 @@ export default function Hero() {
                             <div className="absolute inset-0 border border-white/20 rounded-[2rem] lg:rounded-[3rem] -rotate-2 lg:-rotate-3 scale-95 transition-all duration-700 ease-out group-hover/slider:-rotate-1 group-hover/slider:scale-[1.02]" />
 
                             {/* Main Image Container */}
-                            <div className="absolute inset-2 sm:inset-4 lg:inset-4 xl:inset-6 rounded-[1.8rem] lg:rounded-[3rem] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.5)] lg:shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-10 ring-1 ring-white/10 transition-transform duration-1000 ease-out group-hover/slider:scale-[1.01]">
+                            <div
+                                className="absolute inset-2 sm:inset-4 lg:inset-4 xl:inset-6 rounded-[1.8rem] lg:rounded-[3rem] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.5)] lg:shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-10 ring-1 ring-white/10 transition-transform duration-1000 ease-out group-hover/slider:scale-[1.01] cursor-grab active:cursor-grabbing select-none"
+                                onMouseDown={onMouseDown}
+                                onMouseUp={onMouseUp}
+                                onMouseLeave={onMouseLeave}
+                                onTouchStart={onTouchStart}
+                                onTouchEnd={onTouchEnd}
+                            >
 
                                 <AnimatePresence initial={false} custom={direction} mode="wait">
                                     <motion.img
@@ -164,7 +214,8 @@ export default function Hero() {
                                         src={resolveSlideImage(activeSlide.image)}
                                         alt={activeSlide.alt}
                                         fetchPriority="high"
-                                        className="absolute inset-0 w-full h-full object-cover"
+                                        className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                                        draggable={false}
                                         custom={direction}
                                         variants={slideVariants}
                                         initial="enter"
@@ -173,7 +224,25 @@ export default function Hero() {
                                     />
                                 </AnimatePresence>
 
-
+                                {/* Prev / Next arrow buttons */}
+                                {slides && slides.length > 1 && (
+                                    <>
+                                        <button
+                                            className="absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-black/30 hover:bg-amber-500/80 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:scale-110 cursor-pointer"
+                                            onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                                            aria-label="Previous slide"
+                                        >
+                                            <ChevronLeft size={20} />
+                                        </button>
+                                        <button
+                                            className="absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-black/30 hover:bg-amber-500/80 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:scale-110 cursor-pointer"
+                                            onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                                            aria-label="Next slide"
+                                        >
+                                            <ChevronRight size={20} />
+                                        </button>
+                                    </>
+                                )}
 
                                 {/* Floating Stats Badge — dynamic per slide */}
                                 <div className="absolute bottom-4 left-4 lg:bottom-6 lg:left-6 z-20 bg-[#0B0F19]/80 backdrop-blur-xl border border-white/10 p-2 lg:p-4 rounded-xl lg:rounded-2xl flex items-center gap-2 lg:gap-4 transform transition-transform duration-500 hover:-translate-y-1 lg:hover:-translate-y-2">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bus, Loader2 } from 'lucide-react';
+import { Bus, Loader2, Check, X } from 'lucide-react';
 import { authApi } from '../api/authApi';
 
 const Register = ({ onLogin }) => {
@@ -84,7 +84,6 @@ const Register = ({ onLogin }) => {
         else if (!/[0-9]/.test(password)) passErr = 'Must contain a number';
         else if (!/[^A-Za-z0-9]/.test(password)) passErr = 'Must contain a special character';
         const confirmErr = password !== confirmPassword ? 'Passwords do not match' : '';
-
         if (nameErr || emailErr || passErr || confirmErr) {
             setErrors({ name: nameErr, email: emailErr, password: passErr, confirmPassword: confirmErr });
             return;
@@ -108,7 +107,6 @@ const Register = ({ onLogin }) => {
     const strengthColor = strengthScore <= 2 ? 'bg-red-500' : strengthScore <= 4 ? 'bg-yellow-500' : 'bg-green-500';
     const strengthWidth = strengthScore <= 2 ? 'w-1/3' : strengthScore <= 4 ? 'w-2/3' : 'w-full';
     const strengthTextColor = strengthScore <= 2 ? 'text-red-400' : strengthScore <= 4 ? 'text-yellow-400' : 'text-green-400';
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] relative overflow-hidden px-4 py-8">
             {/* Ambient glow */}
@@ -176,17 +174,20 @@ const Register = ({ onLogin }) => {
                                             placeholder="Minimum 6 characters"
                                             className={`w-full bg-[#1F2937] text-white px-4 py-2.5 rounded-xl text-sm border ${errors.password ? 'border-red-500/50' : 'border-white/10'} focus:border-amber-500/50 focus:outline-none transition-colors placeholder-slate-500`}
                                         />
-                                        {password && (
-                                            <div className="mt-2 ml-1">
-                                                <div className="flex h-1 bg-slate-700/50 rounded-full overflow-hidden w-24 mb-1">
-                                                    <div className={`h-full transition-all duration-300 ${strengthColor} ${strengthWidth}`} />
+                                        <div className="mt-2 ml-1 space-y-1">
+                                            {[
+                                                { id: 'length', text: 'At least 6 characters', isValid: password.length >= 6 },
+                                                { id: 'lowercase', text: 'One lowercase letter', isValid: /[a-z]/.test(password) },
+                                                { id: 'uppercase', text: 'One uppercase letter', isValid: /[A-Z]/.test(password) },
+                                                { id: 'number', text: 'One number', isValid: /[0-9]/.test(password) },
+                                                { id: 'special', text: 'One special character', isValid: /[^A-Za-z0-9]/.test(password) },
+                                            ].map((req) => (
+                                                <div key={req.id} className={`flex items-center gap-1.5 text-xs ${req.isValid ? 'text-green-500' : 'text-red-500'}`}>
+                                                    {req.isValid ? <Check size={14} /> : <X size={14} />}
+                                                    <span>{req.text}</span>
                                                 </div>
-                                                <p className={`text-[10px] font-medium ${strengthTextColor}`}>
-                                                    {strengthLabel === 'Strong' ? 'Strong password!' : strengthLabel}
-                                                </p>
-                                            </div>
-                                        )}
-                                        {errors.password && <p className="text-red-400 text-xs mt-1 ml-1">{errors.password}</p>}
+                                            ))}
+                                        </div>
                                     </div>
 
                                     {/* Confirm Password */}

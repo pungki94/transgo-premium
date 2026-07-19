@@ -375,14 +375,14 @@ app.post('/api/auth/verify-email', express.json(), asyncHandler(async (req, res)
     res.json(result);
 }));
 
-app.post('/api/gallery/add', express.json({ limit: '10mb' }), asyncHandler(async (req, res) => {
+app.post('/api/gallery/add', express.json({ limit: '50mb' }), asyncHandler(async (req, res) => {
     const result = await proxyAuthToGAS('add_gallery', req.body);
     delete sheetCache['gallery'];
     delete sheetCache['gallery-full'];
     res.json(result);
 }));
 
-app.post('/api/gallery/update', express.json({ limit: '10mb' }), asyncHandler(async (req, res) => {
+app.post('/api/gallery/update', express.json({ limit: '50mb' }), asyncHandler(async (req, res) => {
     const result = await proxyAuthToGAS('update_gallery', req.body);
     delete sheetCache['gallery'];
     delete sheetCache['gallery-full'];
@@ -393,6 +393,27 @@ app.post('/api/gallery/delete', express.json(), asyncHandler(async (req, res) =>
     const result = await proxyAuthToGAS('delete_gallery', req.body);
     delete sheetCache['gallery'];
     delete sheetCache['gallery-full'];
+    res.json(result);
+}));
+
+app.post('/api/fleet/add', express.json({ limit: '50mb' }), asyncHandler(async (req, res) => {
+    const result = await proxyAuthToGAS('add_fleet', req.body);
+    delete sheetCache['Fleet'];
+    delete sheetCache['fleet'];
+    res.json(result);
+}));
+
+app.post('/api/fleet/update', express.json({ limit: '50mb' }), asyncHandler(async (req, res) => {
+    const result = await proxyAuthToGAS('update_fleet', req.body);
+    delete sheetCache['Fleet'];
+    delete sheetCache['fleet'];
+    res.json(result);
+}));
+
+app.post('/api/fleet/delete', express.json(), asyncHandler(async (req, res) => {
+    const result = await proxyAuthToGAS('delete_fleet', req.body);
+    delete sheetCache['Fleet'];
+    delete sheetCache['fleet'];
     res.json(result);
 }));
 

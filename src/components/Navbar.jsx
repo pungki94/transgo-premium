@@ -86,7 +86,7 @@ export default function Navbar({ isAuthenticated: propAuthenticated = false, onL
                             <LogoIcon />
                         </div>
                         <span
-                            className="text-lg md:text-xl lg:text-2xl tracking-wide capitalize leading-none"
+                            className="text-lg md:text-xl lg:text-2xl tracking-wide lowercase leading-none"
                             style={{ color: brandTextColor1 }}
                         >
                             {brandName1}
@@ -103,12 +103,6 @@ export default function Navbar({ isAuthenticated: propAuthenticated = false, onL
 
                     {/* Right Side - Nav & Info (Aligns with Hero Slider: col-span-7 + pl-8/14) */}
                     <div className="flex-grow lg:flex-grow-0 h-full flex items-center lg:col-span-7 lg:pl-8 xl:pl-14 relative">
-                        {/* Decorative box lines in the background */}
-                        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                            <div className="absolute top-[10%] right-[5%] w-[40%] h-[80%] border border-white/5 rounded-sm"></div>
-                            <div className="absolute top-[20%] right-[8%] w-[30%] h-[60%] border border-white/[0.03]"></div>
-                        </div>
-
                         {/* Navigation - Desktop */}
                         <nav className={`hidden md:flex items-center w-full h-full relative z-10 pl-4 lg:pl-8 xl:pl-12 pr-2 lg:pr-0`}>
                             <div className="flex flex-1 items-center justify-center gap-3 lg:gap-5 xl:gap-6 overflow-hidden">

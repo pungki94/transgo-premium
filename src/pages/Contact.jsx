@@ -27,7 +27,7 @@ export default function Contact() {
                             <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 md:gap-4 text-base md:text-xl font-bold capitalize italic hover:text-amber-500 transition-colors">
                                 <Phone className="text-amber-500 shrink-0" size={20} /> {phone}
                             </a>
-                            <div className="flex items-center gap-3 md:gap-4 text-base md:text-xl font-bold capitalize italic"><Mail className="text-amber-500 shrink-0" size={20} /> {email}</div>
+                            <div className="flex items-center gap-3 md:gap-4 text-base md:text-xl font-bold lowercase italic"><Mail className="text-amber-500 shrink-0" size={20} /> {email}</div>
                         </div>
                     </div>
                     <a

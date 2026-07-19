@@ -104,6 +104,9 @@ function doPost(e) {
     if (action === 'add_gallery') return handleAddGallery(data, output);
     if (action === 'update_gallery') return handleUpdateGallery(data, output);
     if (action === 'delete_gallery') return handleDeleteGallery(data, output);
+    if (action === 'add_fleet') return handleAddFleet(data, output);
+    if (action === 'update_fleet') return handleUpdateFleet(data, output);
+    if (action === 'delete_fleet') return handleDeleteFleet(data, output);
 
     return output.setContent(JSON.stringify({ status: 'error', error: 'Invalid action: ' + action }));
   } catch (error) {
@@ -330,6 +333,161 @@ function handleResetPassword(data, output) {
   }
 
   return output.setContent(JSON.stringify({ status: 'error', error: 'User tidak ditemukan' }));
+}
+
+// =========================
+// ADD FLEET (KV format)
+// =========================
+function handleAddFleet(data, output) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Fleet");
+  if (!sheet) {
+    sheet = ss.insertSheet("Fleet");
+    sheet.appendRow(["key", "value"]);
+  }
+
+  // Upload image to Drive if provided
+  var imgUrl = "";
+  if (data.fileBase64) {
+    try {
+      var blob = Utilities.newBlob(Utilities.base64Decode(data.fileBase64), data.mimeType || 'image/jpeg', data.fileName || 'fleet_img.jpg');
+      var targetFolder = getGalleryFolder();
+      var file = targetFolder.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      imgUrl = "https://drive.google.com/uc?export=view&id=" + file.getId();
+    } catch (e) {
+      return output.setContent(JSON.stringify({ status: 'error', error: 'Gagal upload gambar: ' + e.toString() }));
+    }
+  }
+
+  // Find next vehicle number
+  var values = sheet.getDataRange().getValues();
+  var maxN = 0;
+  for (var i = 0; i < values.length; i++) {
+    var key = values[i][0] ? values[i][0].toString() : '';
+    var match = key.match(/^vehicle_(\d+)_id$/);
+    if (match) {
+      var n = parseInt(match[1]);
+      if (n > maxN) maxN = n;
+    }
+  }
+  var nextN = maxN + 1;
+  var vehicleId = 'v' + nextN;
+
+  // Append KV rows for the new vehicle
+  var p = 'vehicle_' + nextN + '_';
+  sheet.appendRow([p + 'id', vehicleId]);
+  sheet.appendRow([p + 'image', imgUrl]);
+  sheet.appendRow([p + 'alt', data.name || '']);
+  sheet.appendRow([p + 'name', data.name || '']);
+  sheet.appendRow([p + 'cap', data.cap || '']);
+  sheet.appendRow([p + 'type', data.type || '']);
+  sheet.appendRow([p + 'category', data.category || '']);
+  sheet.appendRow([p + 'features', data.features || '']);
+
+  return output.setContent(JSON.stringify({ status: 'success', message: 'Armada berhasil ditambahkan.' }));
+}
+
+// =========================
+// UPDATE FLEET
+// =========================
+function handleUpdateFleet(data, output) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Fleet");
+  if (!sheet) return output.setContent(JSON.stringify({ status: 'error', error: 'Fleet sheet tidak ditemukan' }));
+  if (!data.id) return output.setContent(JSON.stringify({ status: 'error', error: 'ID fleet tidak ditemukan' }));
+
+  var values = sheet.getDataRange().getValues();
+  var targetN = -1;
+  for (var i = 0; i < values.length; i++) {
+    var key = values[i][0] ? values[i][0].toString() : '';
+    var match = key.match(/^vehicle_(\d+)_id$/);
+    if (match && values[i][1] && values[i][1].toString() === data.id.toString()) {
+      targetN = match[1];
+      break;
+    }
+  }
+
+  if (targetN === -1) return output.setContent(JSON.stringify({ status: 'error', error: 'Data fleet tidak ditemukan' }));
+
+  var p = 'vehicle_' + targetN + '_';
+
+  var imgUrl = "";
+  if (data.fileBase64) {
+    try {
+      var blob = Utilities.newBlob(Utilities.base64Decode(data.fileBase64), data.mimeType || 'image/jpeg', data.fileName || 'fleet_img.jpg');
+      var targetFolder = getGalleryFolder();
+      var file = targetFolder.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      imgUrl = "https://drive.google.com/uc?export=view&id=" + file.getId();
+    } catch (e) {
+      return output.setContent(JSON.stringify({ status: 'error', error: 'Gagal upload gambar: ' + e.toString() }));
+    }
+  }
+
+  var updatedKeys = {
+    name: data.name,
+    alt: data.name,
+    cap: data.cap,
+    type: data.type,
+    category: data.category,
+    features: data.features
+  };
+  if (imgUrl) updatedKeys.image = imgUrl;
+
+  var foundKeys = {};
+  for (var i = 0; i < values.length; i++) {
+    var key = values[i][0] ? values[i][0].toString() : '';
+    if (key.startsWith(p)) {
+      var fKey = key.replace(p, '');
+      if (updatedKeys[fKey] !== undefined) {
+        sheet.getRange(i + 1, 2).setValue(updatedKeys[fKey]);
+        foundKeys[fKey] = true;
+      }
+    }
+  }
+
+  for (var k in updatedKeys) {
+    if (updatedKeys[k] !== undefined && !foundKeys[k]) {
+      sheet.appendRow([p + k, updatedKeys[k]]);
+    }
+  }
+
+  return output.setContent(JSON.stringify({ status: 'success', message: 'Fleet berhasil diupdate.' }));
+}
+
+// =========================
+// DELETE FLEET
+// =========================
+function handleDeleteFleet(data, output) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Fleet");
+  if (!sheet) return output.setContent(JSON.stringify({ status: 'error', error: 'Fleet sheet tidak ditemukan' }));
+  if (!data.id) return output.setContent(JSON.stringify({ status: 'error', error: 'ID fleet tidak ditemukan' }));
+
+  var values = sheet.getDataRange().getValues();
+  var targetN = -1;
+  for (var i = 0; i < values.length; i++) {
+    var key = values[i][0] ? values[i][0].toString() : '';
+    var match = key.match(/^vehicle_(\d+)_id$/);
+    if (match && values[i][1] && values[i][1].toString() === data.id.toString()) {
+      targetN = match[1];
+      break;
+    }
+  }
+
+  if (targetN === -1) return output.setContent(JSON.stringify({ status: 'error', error: 'Data fleet tidak ditemukan' }));
+
+  var p = 'vehicle_' + targetN + '_';
+
+  for (var i = values.length - 1; i >= 0; i--) {
+    var key = values[i][0] ? values[i][0].toString() : '';
+    if (key.startsWith(p)) {
+      sheet.deleteRow(i + 1);
+    }
+  }
+
+  return output.setContent(JSON.stringify({ status: 'success', message: 'Fleet berhasil dihapus.' }));
 }
 
 // =========================

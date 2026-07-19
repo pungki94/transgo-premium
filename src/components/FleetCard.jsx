@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, X, Maximize2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, X, Maximize2, Pencil, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function FleetCard({ name, cap, type, img, features = [] }) {
+export default function FleetCard({ name, cap, type, img, features = [], f, isAuthenticated, onEditClick, onDeleteClick }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
@@ -12,7 +12,18 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                 className="group relative aspect-[4/3] rounded-[20px] md:rounded-[28px] overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.4)] border border-white/5 cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
             >
-                <img src={img} loading="lazy" decoding="async" className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:blur-sm" alt={name} />
+                <img src={img} loading="lazy" decoding="async" referrerPolicy="no-referrer" className="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:blur-sm" alt={name} onError={(e) => { e.target.style.display = 'none'; }} />
+
+                {isAuthenticated && (
+                    <div className="absolute top-3 right-3 flex gap-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={(e) => { e.stopPropagation(); if (onEditClick) onEditClick(e, f); }} className="p-2 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-600 hover:text-amber-700 transition" title="Edit">
+                            <Pencil size={16} />
+                        </button>
+                        <button onClick={(e) => { e.stopPropagation(); if (onDeleteClick) onDeleteClick(e, f.id); }} className="p-2 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-600 hover:text-red-700 transition" title="Delete">
+                            <Trash2 size={16} />
+                        </button>
+                    </div>
+                )}
 
                 {/* Default overlay visible initially */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#080B13]/80 via-transparent to-transparent p-4 md:p-5 flex flex-col justify-end transition-opacity duration-500 group-hover:opacity-0">
@@ -77,7 +88,7 @@ export default function FleetCard({ name, cap, type, img, features = [] }) {
                             </button>
 
                             <div className="w-full md:w-1/2 h-72 sm:h-80 md:h-auto shrink-0 relative">
-                                <img src={img} alt={name} className="w-full h-full object-cover" />
+                                <img src={img} alt={name} referrerPolicy="no-referrer" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
                             </div>
 
                             <div className="w-full md:w-1/2 p-6 md:p-8 lg:p-14 overflow-y-auto custom-scrollbar">
